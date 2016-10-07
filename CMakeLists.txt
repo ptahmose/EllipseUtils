@@ -15,3 +15,7 @@ set(CMAKE_MODULE_PATH ${EIGEN3_INCLUDE_DIR}/cmake)
 find_package(Eigen3 REQUIRED)
 
 include_directories(${EIGEN3_INCLUDE_DIR})
+include_directories(./EllipseUtils)
+
+
+add_executable(Test_EllipseUtils Test_EllipseUtils/stdafx.cpp Test_EllipseUtils/stdafx.h Test_EllipseUtils/Test_EllipseUtils.cpp)

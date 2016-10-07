@@ -142,9 +142,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\EllipseUtils\ellipseparams.h" />
     <ClInclude Include="..\EllipseUtils\ellipseUtils.h" />
     <ClInclude Include="stdafx.h" />
