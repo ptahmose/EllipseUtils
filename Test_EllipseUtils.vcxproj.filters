@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="D:\DEV\GitHub\EllipseUtils\Test_EllipseUtils\stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\DEV\GitHub\EllipseUtils\Test_EllipseUtils\Test_EllipseUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="D:\DEV\GitHub\EllipseUtils\Test_EllipseUtils\stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\DEV\GitHub\EllipseUtils\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{770C052C-BCAF-3614-8BA2-D7D551FEDAA2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{218B3E08-F29F-39FF-917B-A9B9F0DF755B}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

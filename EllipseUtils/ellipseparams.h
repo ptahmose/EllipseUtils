@@ -1,28 +1,45 @@
 #pragma once
 
-template<typename tFloat>
-struct  EllipseParameters
+namespace EllipseUtils
 {
-	tFloat x0, y0;
 
-	/// <summary>	The length of the semi-minor axis. </summary>
-	tFloat a;
-
-	/// <summary>	The length of the semi-major axis. </summary>
-	tFloat b;
-
-	/// <summary>	The angle  between the x-axis and the major-axis. < / summary>
-	tFloat theta;
-
-	void Clear() { this->x0 = this->y0 = this->a = this->b = this->theta = std::numeric_limits<tFloat>::quiet_NaN(); }
-
-	double GetEccentricity() const
+	/// <summary>	The ellipse algebraic parameters -> a x^2 + b x y + c y^2 + d x + e y + f = 0. </summary>
+	template<typename tFloat>
+	struct EllipseAlgebraicParameters
 	{
-		return sqrt(1 - this->b*this->b / (this->a*this->a));
-	}
+		tFloat a, b, c, d, e, f;
 
-	bool IsValid() const { return std::isnormal(this->x0); }
-};
+		bool IsEllipse() const
+		{
+			return this->b*this->b - 4 * this->a*this->c < 0;
+		}
+	};
 
-typedef EllipseParameters<float> EllipseParametersF;
-typedef EllipseParameters<double> EllipseParametersD;
+	template<typename tFloat>
+	struct  EllipseParameters
+	{
+		tFloat x0, y0;
+
+		/// <summary>	The length of the semi-minor axis. </summary>
+		tFloat a;
+
+		/// <summary>	The length of the semi-major axis. </summary>
+		tFloat b;
+
+		/// <summary>	The angle  between the x-axis and the major-axis. < / summary>
+		tFloat theta;
+
+		void Clear() { this->x0 = this->y0 = this->a = this->b = this->theta = std::numeric_limits<tFloat>::quiet_NaN(); }
+
+		double GetEccentricity() const
+		{
+			return sqrt(1 - this->b*this->b / (this->a*this->a));
+		}
+
+		bool IsValid() const { return std::isnormal(this->x0); }
+	};
+
+	typedef EllipseParameters<float> EllipseParametersF;
+	typedef EllipseParameters<double> EllipseParametersD;
+
+}

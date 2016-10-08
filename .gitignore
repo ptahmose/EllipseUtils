@@ -240,3 +240,9 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/CMakeFiles
+/ZERO_CHECK.vcxproj.filters
+/ZERO_CHECK.vcxproj
+/cmake_install.cmake
+/ALL_BUILD.vcxproj.filters
+/ALL_BUILD.vcxproj
