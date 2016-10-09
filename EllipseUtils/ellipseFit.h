@@ -52,7 +52,8 @@ namespace EllipseUtils
 			}
 
 			tFloat mx, my; tFloat minX, minY, maxX, maxY;
-			CalcMeanMinMax(
+			CalcMeanMinMax(pntCnt,getPntsFnc, mx, minX, maxX, my, minY, maxY);
+			/*CalcMeanMinMax(
 				pntCnt,
 				[&](size_t index)
 			{
@@ -69,7 +70,7 @@ namespace EllipseUtils
 				getPntsFnc(index, nullptr, &y);
 				return y;
 			},
-				my, minY, maxY);
+				my, minY, maxY);*/
 			tFloat sx = (maxX - minX) / 2;
 			tFloat sy = (maxY - minY) / 2;
 			//double* designM = (double*)malloc(pntCnt * 6 * sizeof(double));
@@ -107,7 +108,7 @@ namespace EllipseUtils
 					tFloat v = 0;
 					for (size_t k = 0; k < pntCnt; ++k)
 					{
-						tFloat v1 = calcValue(calcVInfo,k, r);
+						tFloat v1 = calcValue(calcVInfo, k, r);
 						//tFloat v1 = designM.get()[k * 6 + r];
 						//tFloat v2 = designM.get()[c + k * 6];
 						tFloat v2 = calcValue(calcVInfo, k, c);
@@ -135,9 +136,9 @@ namespace EllipseUtils
 			cout << "b:" << endl << bMatrix << endl << endl;
 
 
-//			designM.reset();
+			//			designM.reset();
 
-			//double* tmpBtimestmpE = (double*)malloc(3 * 3 * sizeof(double));
+						//double* tmpBtimestmpE = (double*)malloc(3 * 3 * sizeof(double));
 			tFloat tmpBtimestmpE[3 * 3];
 			CalcTmpBtimesTmpE(scatterM + 3, 6 * sizeof(tFloat), scatterM + (3 * 6) + 3, 6 * sizeof(tFloat), tmpBtimestmpE);
 
@@ -192,13 +193,13 @@ namespace EllipseUtils
 				}
 			}
 
-			tFloat A[6];
+			tFloat A[3];
 			auto eigenVecs = eigenSolver.eigenvectors();
 			A[0] = eigenVecs(0, indexPositiveEigenValue).real();
 			A[1] = eigenVecs(1, indexPositiveEigenValue).real();
 			A[2] = eigenVecs(2, indexPositiveEigenValue).real();
 
-			CalcLowerHalf(scatterM + 3, 6 * sizeof(tFloat), scatterM + (3 * 6) + 3, 6 * sizeof(tFloat), A, A + 3);
+			//CalcLowerHalf(scatterM + 3, 6 * sizeof(tFloat), scatterM + (3 * 6) + 3, 6 * sizeof(tFloat), A, A + 3);
 
 			Eigen::Matrix<tFloat, 3, 1> eigenVec(A[0], A[1], A[2]);
 			cout << "eigenVec:" << endl << eigenVec << endl << endl;
@@ -244,6 +245,44 @@ namespace EllipseUtils
 		template <typename number> static number squared(number n)
 		{
 			return (n*n);
+		}
+
+		static void CalcMeanMinMax(size_t pntCnt, std::function<void(size_t index, tFloat*, tFloat*)> getPntFnc, tFloat& meanX, tFloat& minX, tFloat& maxX, tFloat& meanY, tFloat& minY, tFloat& maxY)
+		{
+			minX = minY = (std::numeric_limits<tFloat>::max)();
+			maxX = maxX = (std::numeric_limits<tFloat>::min)();
+			meanX = meanY = 0;
+
+			for (size_t i = 0; i < pntCnt; ++i)
+			{
+				tFloat valueX, valueY;
+				getPntFnc(i,&valueX,&valueY);
+				if (valueX < minX)
+				{
+					minX = valueX;
+				}
+
+				if (valueX > maxX)
+				{
+					maxX = valueX;
+				}
+
+				if (valueY < minY)
+				{
+					minY = valueY;
+				}
+
+				if (valueY > maxY)
+				{
+					maxY = valueY;
+				}
+
+				meanX += valueX;
+				meanY += valueY;
+			}
+
+			meanX = meanX / pntCnt;
+			meanY = meanY / pntCnt;
 		}
 
 		static void CalcMeanMinMax(size_t pntCnt, std::function<tFloat(size_t index)> getPntFnc, tFloat& mean, tFloat& min, tFloat& max)
