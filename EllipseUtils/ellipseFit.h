@@ -1,17 +1,11 @@
 #pragma once
 
 #include <Eigen\Eigenvalues>
-#include <vector>
-#include <memory>
 #include "ellipseparams.h"
 #include "ellipseUtilities.h"
 
-#include <iostream>
-using namespace std;
-
 namespace EllipseUtils
 {
-
 	template <typename tFloat>
 	class CEllipseFit
 	{
@@ -20,7 +14,7 @@ namespace EllipseUtils
 	public:
 		static EllipseParameters<tFloat> LeastSquaresFitEllipse(const std::vector<tFloat>& posX, const std::vector<tFloat>& posY)
 		{
-			return LeastSquaresFitEllipse((std::min)(posX.size(), posY.size()), posX, posY);
+			return CEllipseFit::LeastSquaresFitEllipse((std::min)(posX.size(), posY.size()), posX, posY);
 		}
 
 		static EllipseParameters<tFloat> LeastSquaresFitEllipse(size_t count, const std::vector<tFloat>& posX, const std::vector<tFloat>& posY)
@@ -31,7 +25,7 @@ namespace EllipseUtils
 			}
 
 			DataOnTwoVectors d(count, posX, posY);
-			return LeastSquaresFitEllipse(d);
+			return CEllipseFit::LeastSquaresFitEllipse(d);
 		}
 
 		template <typename tGetData>
