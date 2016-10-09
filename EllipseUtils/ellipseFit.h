@@ -45,6 +45,7 @@ namespace EllipseUtils
 
 		static EllipseParameters<tFloat> LeastSquaresFitEllipse(size_t pntCnt, std::function<void(size_t index, tFloat*, tFloat*)> getPntsFnc)
 		{
+			// http://autotrace.sourceforge.net/WSCG98.pdf
 			if (pntCnt < 6)
 			{
 				throw std::invalid_argument("At least 5 point must be specified.");
@@ -94,7 +95,7 @@ namespace EllipseUtils
 			tFloat scatterM[6 * 6];
 			for (int r = 0; r < 6; ++r)
 			{
-				for (int c = 0; c < 6; ++c)
+				for (int c = r; c < 6; ++c)
 				{
 					tFloat v = 0;
 					for (size_t k = 0; k < pntCnt; ++k)
@@ -106,6 +107,9 @@ namespace EllipseUtils
 
 					scatterM[r * 6 + c] = v;
 					scatterMatrix(r, c) = v;
+
+					scatterM[c * 6 + r] = v;
+					scatterMatrix(c, r) = v;
 				}
 			}
 
@@ -132,9 +136,9 @@ namespace EllipseUtils
 			tFloat testA[3 * 3];
 			CalcTestA(scatterM, 6 * sizeof(tFloat), scatterM + 3, 6 * sizeof(tFloat), scatterM + (3 * 6) + 3, 6 * sizeof(tFloat), testA);
 
-			auto matrixa = Eigen::Matrix<tFloat, 3, 3> (scatterMatrix.block<3, 3>(0, 0)).transpose();
-			auto matrixb = Eigen::Matrix<tFloat, 3, 3>(scatterMatrix.block<3, 3>(3, 0)).transpose();
-			auto matrixc = Eigen::Matrix<tFloat, 3, 3>(scatterMatrix.block<3, 3>(3, 3)).transpose();
+			auto matrixa = (scatterMatrix.block<3, 3>(0, 0));// .transpose();
+			auto matrixb = (scatterMatrix.block<3, 3>(3, 0));//.transpose();
+			auto matrixc = (scatterMatrix.block<3, 3>(3, 3));//.transpose();
 			auto matrixbtransposed = matrixb.transpose();
 			cout << "matrixa:" << endl << matrixa << endl << endl;
 			cout << "matrixb:" << endl << matrixb << endl << endl;
@@ -146,12 +150,15 @@ namespace EllipseUtils
 			matrixconst << 0, 0, -0.5, 0, 1, 0, -0.5, 0, 0;
 			cout << "matrixconst :" << endl << matrixconst << endl << endl;
 
-			auto eigenR = matrixconst * (matrixa - matrixb*(matrixc.inverse()* /*matrixb.transpose()*/matrixbtransposed));
+			auto matrixCInverse = matrixc.inverse();
+
+			//auto eigenR = matrixconst * (matrixa - matrixb*(matrixc.inverse()* /*matrixb.transpose()*/matrixbtransposed));
+			auto eigenR = matrixconst * ((matrixa - matrixbtransposed*matrixCInverse/*matrixc.inverse()*/*matrixb).transpose());
 			cout << "testA:" << endl << eigenR << endl << endl;
 
 			Eigen::EigenSolver<Eigen::Matrix<tFloat, 3, 3>> eigenSolver;
 
-			Eigen::Matrix<tFloat, 3, 3> m;
+			/*Eigen::Matrix<tFloat, 3, 3> m;
 			m(0, 0) = testA[0];
 			m(0, 1) = testA[1];
 			m(0, 2) = testA[2];
@@ -160,9 +167,10 @@ namespace EllipseUtils
 			m(1, 2) = testA[5];
 			m(2, 0) = testA[6];
 			m(2, 1) = testA[7];
-			m(2, 2) = testA[8];
+			m(2, 2) = testA[8];*/
 
-			eigenSolver.compute(m, true);
+			//eigenSolver.compute(m, true);
+			eigenSolver.compute(eigenR, true);
 
 			int indexPositiveEigenValue = -1;
 			auto eigenval = eigenSolver.eigenvalues();
@@ -182,6 +190,13 @@ namespace EllipseUtils
 			A[2] = eigenVecs(2, indexPositiveEigenValue).real();
 
 			CalcLowerHalf(scatterM + 3, 6 * sizeof(tFloat), scatterM + (3 * 6) + 3, 6 * sizeof(tFloat), A, A + 3);
+
+			Eigen::Matrix<tFloat, 3,1> eigenVec(A[0], A[1], A[2]);
+			cout << "eigenVec:" << endl << eigenVec << endl << endl;
+			
+			auto tv0 = (-/*(matrixc.transpose()).inverse()*/matrixCInverse.transpose() * matrixb)*eigenVec;
+			cout << "tv0:" << endl << tv0 << endl << endl;
+
 
 			tFloat par[6];
 			par[0] = A[0] * sy*sy;
@@ -287,6 +302,14 @@ namespace EllipseUtils
 
 		static void CalcLowerHalf(const double* pB, int strideB, const double* pC, int strideC, const double* ptrAUpperHalf, double* ptrDest)
 		{
+			/* Mathematica:
+			
+			-(Inverse[{{c11, c12, c13}, {c21, c22, c23}, {c31, c32, 
+			c33}}].Transpose[{{b11, b12, b13}, {b21, b22, b23}, {b31, 
+			b32, b33}}]).{a1, a2, a3} // Simplify // CForm
+			*/
+
+
 #define b(r,c) *((double*)(((char*)pB)+(r-1)*strideB+(c-1)*sizeof(double)))
 #define c(r,c) *((double*)(((char*)pC)+(r-1)*strideC+(c-1)*sizeof(double)))
 
