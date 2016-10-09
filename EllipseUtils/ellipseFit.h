@@ -74,7 +74,7 @@ namespace EllipseUtils
 			tFloat sy = (maxY - minY) / 2;
 			//double* designM = (double*)malloc(pntCnt * 6 * sizeof(double));
 
-			std::unique_ptr<tFloat> designM(new tFloat[pntCnt * 6]);
+			/*std::unique_ptr<tFloat> designM(new tFloat[pntCnt * 6]);
 			for (size_t i = 0; i < pntCnt; ++i)
 			{
 				tFloat x, y;
@@ -87,9 +87,16 @@ namespace EllipseUtils
 				designM.get()[i * 6 + 3] = x;
 				designM.get()[i * 6 + 4] = y;
 				designM.get()[i * 6 + 5] = 1;
-			}
+			}*/
 
 			Eigen::Matrix<tFloat, 6, 6> scatterMatrix;
+
+			CalcValueInfo calcVInfo;
+			calcVInfo.getPntsFnc = getPntsFnc;
+			calcVInfo.mx = mx;
+			calcVInfo.sx = sx;
+			calcVInfo.my = my;
+			calcVInfo.sy = sy;
 
 			//double* scatterM = (double*)malloc(6 * 6 * sizeof(double));
 			tFloat scatterM[6 * 6];
@@ -100,8 +107,10 @@ namespace EllipseUtils
 					tFloat v = 0;
 					for (size_t k = 0; k < pntCnt; ++k)
 					{
-						tFloat v1 = designM.get()[k * 6 + r];
-						tFloat v2 = designM.get()[c + k * 6];
+						tFloat v1 = calcValue(calcVInfo,k, r);
+						//tFloat v1 = designM.get()[k * 6 + r];
+						//tFloat v2 = designM.get()[c + k * 6];
+						tFloat v2 = calcValue(calcVInfo, k, c);
 						v += v1*v2;
 					}
 
@@ -126,7 +135,7 @@ namespace EllipseUtils
 			cout << "b:" << endl << bMatrix << endl << endl;
 
 
-			designM.reset();
+//			designM.reset();
 
 			//double* tmpBtimestmpE = (double*)malloc(3 * 3 * sizeof(double));
 			tFloat tmpBtimestmpE[3 * 3];
@@ -201,11 +210,11 @@ namespace EllipseUtils
 			ep.a = A[0] * sy*sy;
 			ep.b = A[1] * sx*sy;
 			ep.c = A[2] * sx*sx;
-			ep.d = -2 * A[0] * sy*sy*mx - A[1]  * sx*sy*my + tv0(3-3) * sx*sy*sy;
-			ep.e = -A[1] * sx*sy*mx - 2 * A[2] * sx*sx*my + tv0(4-3) * sx*sx*sy;
+			ep.d = -2 * A[0] * sy*sy*mx - A[1] * sx*sy*my + tv0(3 - 3) * sx*sy*sy;
+			ep.e = -A[1] * sx*sy*mx - 2 * A[2] * sx*sx*my + tv0(4 - 3) * sx*sx*sy;
 			ep.f = A[0] * sy*sy*mx*mx + A[1] * sx*sy*mx*my + A[2] * sx*sx*my*my
-				- tv0(3-3) * sx*sy*sy*mx - tv0(4-3) * sx*sx*sy*my
-				+ tv0(5-3) * sx*sx*sy*sy;
+				- tv0(3 - 3) * sx*sy*sy*mx - tv0(4 - 3) * sx*sx*sy*my
+				+ tv0(5 - 3) * sx*sx*sy*sy;
 
 			/*
 			tFloat par[6];
@@ -375,6 +384,35 @@ namespace EllipseUtils
 #undef c
 #undef b
 #undef a
+		}
+
+		struct CalcValueInfo
+		{
+			std::function<void(size_t index, tFloat*, tFloat*)> getPntsFnc;
+			tFloat mx, sx, my, sy;
+		};
+
+		static tFloat calcValue(const CalcValueInfo& info, size_t n, int c)
+		{
+			tFloat x, y;
+			info.getPntsFnc(n, &x, &y);
+			x = (x - info.mx) / info.sx;
+			y = (y - info.my) / info.sy;
+			switch (c)
+			{
+			case 0:
+				return x*x;
+			case 1:
+				return x*y;
+			case 2:
+				return y*y;
+			case 3:
+				return x;
+			case 4:
+				return y;
+			case 5:
+				return 1;
+			}
 		}
 	};
 }
