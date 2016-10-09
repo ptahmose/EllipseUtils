@@ -191,13 +191,23 @@ namespace EllipseUtils
 
 			CalcLowerHalf(scatterM + 3, 6 * sizeof(tFloat), scatterM + (3 * 6) + 3, 6 * sizeof(tFloat), A, A + 3);
 
-			Eigen::Matrix<tFloat, 3,1> eigenVec(A[0], A[1], A[2]);
+			Eigen::Matrix<tFloat, 3, 1> eigenVec(A[0], A[1], A[2]);
 			cout << "eigenVec:" << endl << eigenVec << endl << endl;
-			
+
 			auto tv0 = (-/*(matrixc.transpose()).inverse()*/matrixCInverse.transpose() * matrixb)*eigenVec;
 			cout << "tv0:" << endl << tv0 << endl << endl;
 
+			EllipseAlgebraicParameters<tFloat> ep;
+			ep.a = A[0] * sy*sy;
+			ep.b = A[1] * sx*sy;
+			ep.c = A[2] * sx*sx;
+			ep.d = -2 * A[0] * sy*sy*mx - A[1]  * sx*sy*my + tv0(3-3) * sx*sy*sy;
+			ep.e = -A[1] * sx*sy*mx - 2 * A[2] * sx*sx*my + tv0(4-3) * sx*sx*sy;
+			ep.f = A[0] * sy*sy*mx*mx + A[1] * sx*sy*mx*my + A[2] * sx*sx*my*my
+				- tv0(3-3) * sx*sy*sy*mx - tv0(4-3) * sx*sx*sy*my
+				+ tv0(5-3) * sx*sx*sy*sy;
 
+			/*
 			tFloat par[6];
 			par[0] = A[0] * sy*sy;
 			par[1] = A[1] * sx*sy;
@@ -208,7 +218,6 @@ namespace EllipseUtils
 				- A[3] * sx*sy*sy*mx - A[4] * sx*sx*sy*my
 				+ A[5] * sx*sx*sy*sy;
 
-
 			EllipseAlgebraicParameters<tFloat> ep;
 			ep.a = par[0];
 			ep.b = par[1];
@@ -216,6 +225,7 @@ namespace EllipseUtils
 			ep.d = par[3];
 			ep.e = par[4];
 			ep.f = par[5];
+			*/
 
 			//EllipseParameters elliParams;
 			return CEllipseUtilities::AlgebraicParameterToEllipseParameters<tFloat>(ep);
@@ -303,9 +313,9 @@ namespace EllipseUtils
 		static void CalcLowerHalf(const double* pB, int strideB, const double* pC, int strideC, const double* ptrAUpperHalf, double* ptrDest)
 		{
 			/* Mathematica:
-			
-			-(Inverse[{{c11, c12, c13}, {c21, c22, c23}, {c31, c32, 
-			c33}}].Transpose[{{b11, b12, b13}, {b21, b22, b23}, {b31, 
+
+			-(Inverse[{{c11, c12, c13}, {c21, c22, c23}, {c31, c32,
+			c33}}].Transpose[{{b11, b12, b13}, {b21, b22, b23}, {b31,
 			b32, b33}}]).{a1, a2, a3} // Simplify // CForm
 			*/
 
