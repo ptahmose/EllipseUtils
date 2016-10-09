@@ -31,7 +31,7 @@ namespace EllipseUtils
 
 		void Clear() { this->x0 = this->y0 = this->a = this->b = this->theta = std::numeric_limits<tFloat>::quiet_NaN(); }
 
-		double GetEccentricity() const
+		tFloat GetEccentricity() const
 		{
 			return sqrt(1 - this->b*this->b / (this->a*this->a));
 		}
@@ -41,5 +41,8 @@ namespace EllipseUtils
 
 	typedef EllipseParameters<float> EllipseParametersF;
 	typedef EllipseParameters<double> EllipseParametersD;
+
+	typedef EllipseAlgebraicParameters<float> EllipseAlgebraicParametersF;
+	typedef EllipseAlgebraicParameters<double> EllipseAlgebraicParametersD;
 
 }
