@@ -31,6 +31,12 @@ namespace EllipseUtils
 		template <typename tGetData>
 		static EllipseParameters<tFloat> LeastSquaresFitEllipse(const tGetData& gd)
 		{
+			return CEllipseUtilities::AlgebraicParameterToEllipseParameters<tFloat>(CEllipseFit::LeastSquaresFitEllipseAlgebraicParameters(gd));
+		}
+
+		template <typename tGetData>
+		static EllipseAlgebraicParameters<tFloat> LeastSquaresFitEllipseAlgebraicParameters(const tGetData& gd)
+		{
 			if (gd.Count() < 6)
 			{
 				throw std::invalid_argument("At least 5 point must be specified.");
@@ -88,7 +94,7 @@ namespace EllipseUtils
 			const Eigen::Matrix<tFloat, 3, 1> eigenVec = eigenSolver.eigenvectors().block<3, 1>(0, indexPositiveEigenValue).real();
 			const auto tv0 = -((matrixCInverse.transpose() * matrixb)*eigenVec);
 
-			EllipseAlgebraicParameters<tFloat> ep
+			return EllipseAlgebraicParameters<tFloat>
 			{
 			 eigenVec(0) * sy*sy,
 			 eigenVec(1) * sx*sy,
@@ -97,7 +103,6 @@ namespace EllipseUtils
 			 -eigenVec(1) * sx*sy*mx - 2 * eigenVec(2) * sx*sx*my + tv0(1) * sx*sx*sy,
 			 eigenVec(0) * sy*sy*mx*mx + eigenVec(1) * sx*sy*mx*my + eigenVec(2) * sx*sx*my*my - tv0(0) * sx*sy*sy*mx - tv0(1) * sx*sx*sy*my + tv0(2) * sx*sx*sy*sy
 			};
-			return CEllipseUtilities::AlgebraicParameterToEllipseParameters<tFloat>(ep);
 		}
 	private:
 		template <typename tGetData>
@@ -134,8 +139,8 @@ namespace EllipseUtils
 				meanY += std::get<1>(value);
 			}
 
-			meanX = meanX / g.Count();
-			meanY = meanY / g.Count();
+			meanX /= g.Count();
+			meanY /= g.Count();
 		}
 
 		struct CalcValueInformation
@@ -205,4 +210,7 @@ namespace EllipseUtils
 
 	template <typename tFloat>
 	const Eigen::Matrix<tFloat, 3, 3> CEllipseFit<tFloat>::MatrixConstant = (Eigen::Matrix<tFloat, 3, 3>() << 0, 0, (tFloat)-0.5, 0, 1, 0, (tFloat)-0.5, 0, 0).finished();
+
+	typedef CEllipseFit<float> CEllipseFitF;
+	typedef CEllipseFit<double> CEllipseFitD;
 }
