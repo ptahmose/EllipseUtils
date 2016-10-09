@@ -6,6 +6,9 @@
 #include "ellipseparams.h"
 #include "ellipseUtilities.h"
 
+#include <iostream>
+using namespace std;
+
 namespace EllipseUtils
 {
 
@@ -18,8 +21,13 @@ namespace EllipseUtils
 			return LeastSquaresFitEllipse((std::min)(posX.size(), posY.size()), posX, posY);
 		}
 
-		static EllipseParameters<tFloat> LeastSquaresFitEllipse(size_t count,const std::vector<tFloat>& posX, const std::vector<tFloat>& posY)
+		static EllipseParameters<tFloat> LeastSquaresFitEllipse(size_t count, const std::vector<tFloat>& posX, const std::vector<tFloat>& posY)
 		{
+			if (count > posX.size() || count > posY.size())
+			{
+				throw std::invalid_argument("The value specified for count is too large.");
+			}
+
 			return LeastSquaresFitEllipse(count,
 				[&](size_t idx, tFloat* x, tFloat* y)->void
 			{
@@ -39,8 +47,7 @@ namespace EllipseUtils
 		{
 			if (pntCnt < 6)
 			{
-				EllipseParameters<tFloat> ep; ep.Clear();
-				return ep;
+				throw std::invalid_argument("At least 5 point must be specified.");
 			}
 
 			tFloat mx, my; tFloat minX, minY, maxX, maxY;
@@ -81,6 +88,8 @@ namespace EllipseUtils
 				designM.get()[i * 6 + 5] = 1;
 			}
 
+			Eigen::Matrix<tFloat, 6, 6> scatterMatrix;
+
 			//double* scatterM = (double*)malloc(6 * 6 * sizeof(double));
 			tFloat scatterM[6 * 6];
 			for (int r = 0; r < 6; ++r)
@@ -96,8 +105,22 @@ namespace EllipseUtils
 					}
 
 					scatterM[r * 6 + c] = v;
+					scatterMatrix(r, c) = v;
 				}
 			}
+
+			auto upperLeft = scatterMatrix.block<3, 3>(3, 0);
+			auto lowerRight = scatterMatrix.block<3, 3>(3, 3);
+
+			cout << "scatterMatrix:" << endl << scatterMatrix << endl << endl;
+			cout << "upperLeft:" << endl << upperLeft << endl << endl;
+			cout << "lowerRight:" << endl << lowerRight << endl << endl;
+
+			cout << "lowerRight^-1" << endl << lowerRight.inverse() << endl << endl;
+
+			auto bMatrix = upperLeft * ((lowerRight.inverse()) * (upperLeft.transpose()));
+			cout << "b:" << endl << bMatrix << endl << endl;
+
 
 			designM.reset();
 
@@ -108,6 +131,23 @@ namespace EllipseUtils
 			//double* testA = (double*)malloc(3 * 3 * sizeof(double));
 			tFloat testA[3 * 3];
 			CalcTestA(scatterM, 6 * sizeof(tFloat), scatterM + 3, 6 * sizeof(tFloat), scatterM + (3 * 6) + 3, 6 * sizeof(tFloat), testA);
+
+			auto matrixa = Eigen::Matrix<tFloat, 3, 3> (scatterMatrix.block<3, 3>(0, 0)).transpose();
+			auto matrixb = Eigen::Matrix<tFloat, 3, 3>(scatterMatrix.block<3, 3>(3, 0)).transpose();
+			auto matrixc = Eigen::Matrix<tFloat, 3, 3>(scatterMatrix.block<3, 3>(3, 3)).transpose();
+			auto matrixbtransposed = matrixb.transpose();
+			cout << "matrixa:" << endl << matrixa << endl << endl;
+			cout << "matrixb:" << endl << matrixb << endl << endl;
+			cout << "matrixc:" << endl << matrixc << endl << endl;
+			cout << "matrixbtransposed :" << endl << matrixbtransposed << endl << endl;
+
+
+			Eigen::Matrix<tFloat, 3, 3> matrixconst;
+			matrixconst << 0, 0, -0.5, 0, 1, 0, -0.5, 0, 0;
+			cout << "matrixconst :" << endl << matrixconst << endl << endl;
+
+			auto eigenR = matrixconst * (matrixa - matrixb*(matrixc.inverse()* /*matrixb.transpose()*/matrixbtransposed));
+			cout << "testA:" << endl << eigenR << endl << endl;
 
 			Eigen::EigenSolver<Eigen::Matrix<tFloat, 3, 3>> eigenSolver;
 
@@ -163,13 +203,13 @@ namespace EllipseUtils
 			ep.f = par[5];
 
 			//EllipseParameters elliParams;
-			return CEllipseUtilities<tFloat>::AlgebraicParameterToEllipseParameters(ep);
+			return CEllipseUtilities::AlgebraicParameterToEllipseParameters<tFloat>(ep);
 		}
 
 	private:
 		template <typename number> static number squared(number n)
-		{ 
-			return (n*n); 
+		{
+			return (n*n);
 		}
 
 		static void CalcMeanMinMax(size_t pntCnt, std::function<tFloat(size_t index)> getPntFnc, tFloat& mean, tFloat& min, tFloat& max)

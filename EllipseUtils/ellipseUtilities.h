@@ -4,10 +4,15 @@ namespace EllipseUtils
 {
 
 
-	template <typename tFloat>
 	class CEllipseUtilities
 	{
 	public:
+		/*static const double PI = 3.141592653589793238463;
+		static const float  PI_F = 3.14159265358979f;
+		static const double PI_2 = 3.141592653589793238463 / 2;
+		static const float  PI_2_F = 3.14159265358979f / 2;*/
+
+		template <typename tFloat>
 		static EllipseParameters<tFloat> AlgebraicParameterToEllipseParameters(const EllipseAlgebraicParameters<tFloat>& p1)
 		{
 			EllipseParameters<tFloat> p2;
@@ -31,7 +36,7 @@ namespace EllipseUtils
 			// all we have to do is to check what the major axis is...
 			if (sigma > 0)
 			{
-				p2.theta += 1.57079632679489661923 /*M_PI_2*/;
+				p2.theta += (tFloat)1.57079632679489661923/*M_PI_2*/;
 			}
 
 			return p2;
