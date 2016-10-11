@@ -2,13 +2,20 @@
 
 #include <fstream>
 #include <functional>
+#include "../EllipseUtils/ellipseUtils.h"
 
 class CWriteSvg
 {
 private:
-	std::ofstream& stream;
+	std::ostream& stream;
 public:
-	CWriteSvg(std::ofstream& stream);
+	CWriteSvg(std::ostream& stream);
 
-	void Write(std::function<bool(int, double&, double&)> getPoints);
+	void Write(std::function<bool(int, double&, double&)> getPoints, const EllipseUtils::EllipseParameters<double>* ellipseParameters);
+
+private:
+	void WriteProlog();
+	void WriteEpilog();
+	void WritePoints(const std::function<bool(int, double&, double&)>& function);
+	void WriteEllipse(const EllipseUtils::EllipseParameters<double>& ellipseParameters);
 };

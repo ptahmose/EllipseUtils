@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include <Eigen\Eigenvalues>
 #include "ellipseparams.h"
 #include "ellipseUtilities.h"
