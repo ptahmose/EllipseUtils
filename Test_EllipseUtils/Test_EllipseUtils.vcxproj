@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\EllipseUtils\ellipseBasicTypes.h" />
     <ClInclude Include="..\EllipseUtils\ellipseFit.h" />
     <ClInclude Include="..\EllipseUtils\ellipseparams.h" />
     <ClInclude Include="..\EllipseUtils\ellipseUtilities.h" />

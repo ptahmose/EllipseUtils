@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ellipseBasicTypes.h"
+
 namespace EllipseUtils
 {
 
@@ -42,6 +44,25 @@ namespace EllipseUtils
 			return p2;
 		}
 
+		template <typename tFloat>
+
+		/// Calculates the axis aligned bounding box which covers the specified ellipse.
+		/// \param ellP The ellipse.
+		/// \return The calculated axis aligned bounding box.
+		static Rect<tFloat> CalcAxisAlignedBoundingBox(const EllipseParameters<tFloat>& ellP)
+		{
+			tFloat a = ellP.a* cos(ellP.theta);
+			tFloat b = ellP.b * sin(ellP.theta);
+			tFloat c = ellP.a * sin(ellP.theta);
+			tFloat d = ellP.b * cos(ellP.theta);
+			tFloat width = sqrt(a*a + b*b) * 2;
+			tFloat height = sqrt(c*c + d*d) * 2;
+			tFloat x = ellP.x0 - width / 2;
+			tFloat y = ellP.y0 - height / 2;
+			return Rect<tFloat>{ x, y, width, height };
+		}
+
+	private:
 		template <typename number> static number squared(number n)
 		{
 			return (n*n);

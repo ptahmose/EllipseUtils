@@ -1,6 +1,6 @@
 #pragma once
 
-#include <fstream>
+#include <tuple>
 #include <functional>
 #include "../EllipseUtils/ellipseUtils.h"
 
@@ -14,8 +14,9 @@ public:
 	void Write(std::function<bool(int, double&, double&)> getPoints, const EllipseUtils::EllipseParameters<double>* ellipseParameters);
 
 private:
-	void WriteProlog();
+	void WriteProlog(const EllipseUtils::Rect<int>& viewBox);
 	void WriteEpilog();
 	void WritePoints(const std::function<bool(int, double&, double&)>& function);
 	void WriteEllipse(const EllipseUtils::EllipseParameters<double>& ellipseParameters);
+	EllipseUtils::Rect<int> CalcViewbox(const std::function<bool(int, double&, double&)>& function, const EllipseUtils::EllipseParameters<double>* ellipse_parameters);
 };

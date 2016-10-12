@@ -39,6 +39,9 @@
     <ClInclude Include="options.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\EllipseUtils\ellipseBasicTypes.h">
+      <Filter>Header Files\EllipseUtils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
