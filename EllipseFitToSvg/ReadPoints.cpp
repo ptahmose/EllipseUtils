@@ -7,7 +7,7 @@ CReadPoints::CReadPoints()
 {
 }
 
-void CReadPoints::Read(std::ifstream& stream,std::function<void(double, double)> addPoint)
+void CReadPoints::Read(std::istream& stream,std::function<void(double, double)> addPoint)
 {
 	std::string line;
 	while (std::getline(stream, line))
@@ -25,7 +25,7 @@ void CReadPoints::Read(std::ifstream& stream,std::function<void(double, double)>
 	}
 }
 
-std::tuple<std::vector<double>, std::vector<double>> CReadPoints::ReadD(std::ifstream& stream)
+std::tuple<std::vector<double>, std::vector<double>> CReadPoints::ReadD(std::istream& stream)
 {
 	std::vector<double> xPos;
 	std::vector<double> yPos;

@@ -25,13 +25,14 @@ struct Arg : public option::Arg
 
 
 COptions::COptions()
-	: cmdMode(CommandMode::None)
+	: cmdMode(CommandMode::None),
+	  fitPointsOutputMode(FitPointsOutputMode::None)
 {
 }
 
 bool COptions::ParseCommandLine(int argc, char** argv)
 {
-	enum  optionIndex { UNKNOWN, HELP, COMMAND , INPUTPOINTS};
+	enum  optionIndex { UNKNOWN, HELP, COMMAND, INPUTPOINTS, FILENAMESVGOUTPUT };
 
 	const option::Descriptor usage[] =
 	{
@@ -40,6 +41,7 @@ bool COptions::ParseCommandLine(int argc, char** argv)
 		{ HELP,    0,"" , "help",option::Arg::None, "  --help  \tPrint usage and exit." },
 		{ COMMAND,    0,"c", "command",Arg::Required, "  --command, -c  \tMay either be 'fit' or 'generate'." },
 		{ INPUTPOINTS,    0,"i", "input",Arg::Required, "  --input, -i  \tThe input file." },
+		{ FILENAMESVGOUTPUT,0,"s","svgoutput",Arg::Required, "  --svgoutput, -s  \tThe SVG-output filename." },
 		{ UNKNOWN, 0,"" ,  ""   ,option::Arg::None, "\nExamples:\n"
 		"  example --unknown -- --this_is_no_option\n"
 		"  example -unk --plus -ppp file1 file2\n" },
@@ -73,7 +75,16 @@ bool COptions::ParseCommandLine(int argc, char** argv)
 		case INPUTPOINTS:
 			this->filenamePoints = opt.arg;
 			break;
+		case FILENAMESVGOUTPUT:
+			this->filenameSvgOutput = opt.arg;
+			this->fitPointsOutputMode |= FitPointsOutputMode::WriteSvg;
+			break;
 		}
+	}
+
+	if (this->cmdMode==CommandMode::FitPoints)
+	{
+		this->fitPointsOutputMode |= FitPointsOutputMode::WriteResultToStdout;
 	}
 
 
@@ -82,11 +93,11 @@ bool COptions::ParseCommandLine(int argc, char** argv)
 
 CommandMode COptions::ParseCommandMode(const char* sz)
 {
-	if (_stricmp("fit",sz)==0)
+	if (_stricmp("fit", sz) == 0)
 	{
 		return CommandMode::FitPoints;
 	}
-	else if (_stricmp("gen", sz) == 0|| _stricmp("generate", sz) == 0)
+	else if (_stricmp("gen", sz) == 0 || _stricmp("generate", sz) == 0)
 	{
 		return CommandMode::GeneratePoints;
 	}
