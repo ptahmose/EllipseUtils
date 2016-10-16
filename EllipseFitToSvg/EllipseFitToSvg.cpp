@@ -30,6 +30,7 @@ int main(int argc, char** argv)
 		break;
 	}
 
+#if false
 	std::ifstream myfile(R"(D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\points1.txt)");
 
 	CReadPoints readPoints;
@@ -57,7 +58,7 @@ int main(int argc, char** argv)
 		return true;
 	},
 		&ellipse_parameters);
-
+#endif
 	return 0;
 }
 

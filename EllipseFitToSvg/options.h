@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <type_traits>
+#include "../EllipseUtils/ellipseparams.h"
 
 enum class CommandMode
 {
@@ -40,6 +41,7 @@ private:
 	std::string filenameSvgOutput;
 	CommandMode cmdMode;
 	FitPointsOutputMode fitPointsOutputMode;
+	EllipseUtils::EllipseParameters<double> ellipseParameters;
 public:
 	COptions();
 
@@ -49,6 +51,11 @@ public:
 	const std::string& GetFilenameForPoints() const { return this->filenamePoints; }
 	FitPointsOutputMode GetFitPointsOutputMode() const { return this->fitPointsOutputMode; }
 	const std::string& GetFilenameForSvgOutput() const { return this->filenameSvgOutput; }
+	const EllipseUtils::EllipseParameters<double>& GetEllipseParameters() const { return this->ellipseParameters; }
 private:
 	CommandMode ParseCommandMode(const char* sz);
+	EllipseUtils::EllipseParameters<double> ParseEllipseParameters(const char* sz);
+	EllipseUtils::EllipseParameters<double> ParseEllipseParameters(const std::string& sz);
+
+	static bool ParseDouble(const std::string& s,double* ptrDbl);
 };
