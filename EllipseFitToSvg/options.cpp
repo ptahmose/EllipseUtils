@@ -85,6 +85,7 @@ bool COptions::ParseCommandLine(int argc, char** argv)
 			break;
 		case GENERATEPOINTS_ELLIPSEPARAMS:
 			this->ellipseParameters = ParseEllipseParameters(opt.arg);
+			break;
 		}
 	}
 
@@ -134,19 +135,13 @@ EllipseUtils::EllipseParameters<double> COptions::ParseEllipseParameters(const s
 
 			successful = true;
 		}
-		//for (size_t i = 0; i < pieces_match.size(); ++i)
-		//{
-		//	std::ssub_match sub_match = pieces_match[i];
-		//	std::string piece = sub_match.str();
-		//	std::cout << "  submatch " << i << ": " << piece << '\n';
-		//}
 	}
 
 	EllipseUtils::EllipseParameters<double> params;
 	params.Clear();
 	if (successful == false)
 	{
-		std::cerr << "invalid ellipse-parameters: \"" << sz << "\"" << std::endl;
+		std::cerr << "invalid ellipse-parameters: \"" << sz << "\"." << std::endl;
 		return params;
 	}
 
@@ -167,9 +162,37 @@ EllipseUtils::EllipseParameters<double> COptions::ParseEllipseParameters(const s
 		bool b = ParseDouble(args[i], &(params.*TableForArguments[i].mfp));
 		if (b == false)
 		{
-			std::cerr << "invalid argument for '" << TableForArguments[i].argName << "' (when parsing ellipse-parameters) -> \"" << args[i] << "\"" << std::endl;
+			std::cerr << "invalid argument for '" << TableForArguments[i].argName << "' (when parsing ellipse-parameters) -> \"" << args[i] << "\"." << std::endl;
+			params.Clear();
+			return params;
 		}
 	}
+
+	// special treatment for the angle parameter - if the number is followed by "deg", "degree" or "°", we interpret
+	// the number as given in degrees; otherwise it is assumed to be given in radians
+	bool angleGivenInDegrees = false;
+	std::string angleStr = args[4];
+	std::regex degRegex(R"(^(.*)(?:deg|degree|°)\s*$)");
+	if (std::regex_match(angleStr, pieces_match, degRegex))
+	{
+		if (pieces_match.size() == 2)
+		{
+			angleStr = pieces_match[1].str();
+			angleGivenInDegrees = true;
+		}
+	}
+
+	bool b = ParseDouble(angleStr, &params.theta);
+	if (b == false)
+	{
+		std::cerr << "invalid argument for 'theta' (when parsing ellipse-parameters) -> \"" << args[4] << "\"." << std::endl;
+	}
+
+	if (angleGivenInDegrees == true)
+	{
+		params.theta = params.theta / 180.0 * 3.141592653589793238463;
+	}
+
 	/*
 			b = ParseDouble(args[1], &params.y0);
 			if (b == false)
