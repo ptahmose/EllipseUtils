@@ -18,7 +18,7 @@ struct Arg : public option::Arg
 
 	static option::ArgStatus Required(const option::Option& option, bool msg)
 	{
-		if (option.arg != 0)
+		if (option.arg != nullptr)
 			return option::ARG_OK;
 
 		if (msg) printError("Option '", option, "' requires an argument\n");
@@ -85,6 +85,11 @@ bool COptions::ParseCommandLine(int argc, char** argv)
 			break;
 		case GENERATEPOINTS_ELLIPSEPARAMS:
 			this->ellipseParameters = ParseEllipseParameters(opt.arg);
+			if (!this->ellipseParameters.IsValid())
+			{
+				return false;
+			}
+
 			break;
 		}
 	}
@@ -186,6 +191,8 @@ EllipseUtils::EllipseParameters<double> COptions::ParseEllipseParameters(const s
 	if (b == false)
 	{
 		std::cerr << "invalid argument for 'theta' (when parsing ellipse-parameters) -> \"" << args[4] << "\"." << std::endl;
+		params.Clear();
+		return params;
 	}
 
 	if (angleGivenInDegrees == true)
@@ -193,27 +200,6 @@ EllipseUtils::EllipseParameters<double> COptions::ParseEllipseParameters(const s
 		params.theta = params.theta / 180.0 * 3.141592653589793238463;
 	}
 
-	/*
-			b = ParseDouble(args[1], &params.y0);
-			if (b == false)
-			{
-				std::cerr << "invalid argument for 'y0' (when parsing ellipse-parameters) -> \"" << args[1] << "\"" << std::endl;
-			}
-
-			b = ParseDouble(args[0], &params.a);
-			if (b == false)
-			{
-				std::cerr << "invalid argument for 'a' (when parsing ellipse-parameters) -> \"" << args[2] << "\"" << std::endl;
-			}
-
-			b = ParseDouble(args[0], &params.b);
-			if (b == false)
-			{
-				std::cerr << "invalid argument for 'b' (when parsing ellipse-parameters) -> \"" << args[3] << "\"" << std::endl;
-			}
-
-			b = ParseDouble(args[0], &params.theta);
-	*/
 	return params;
 }
 
