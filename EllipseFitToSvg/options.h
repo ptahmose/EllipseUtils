@@ -53,9 +53,8 @@ public:
 	const std::string& GetFilenameForSvgOutput() const { return this->filenameSvgOutput; }
 	const EllipseUtils::EllipseParameters<double>& GetEllipseParameters() const { return this->ellipseParameters; }
 private:
-	CommandMode ParseCommandMode(const char* sz);
-	EllipseUtils::EllipseParameters<double> ParseEllipseParameters(const char* sz);
-	EllipseUtils::EllipseParameters<double> ParseEllipseParameters(const std::string& sz);
-
+	static CommandMode ParseCommandMode(const char* sz);
+	static EllipseUtils::EllipseParameters<double> ParseEllipseParameters(const char* sz);
+	static EllipseUtils::EllipseParameters<double> ParseEllipseParameters(const std::string& sz);
 	static bool ParseDouble(const std::string& s,double* ptrDbl);
 };

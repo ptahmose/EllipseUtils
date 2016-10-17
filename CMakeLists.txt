@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 2.8)
 
 project (EllipseUtils)
 
@@ -18,4 +18,7 @@ include_directories(${EIGEN3_INCLUDE_DIR})
 include_directories(./EllipseUtils)
 
 
-add_executable(Test_EllipseUtils Test_EllipseUtils/stdafx.cpp Test_EllipseUtils/stdafx.h Test_EllipseUtils/Test_EllipseUtils.cpp)
+#add_executable(Test_EllipseUtils Test_EllipseUtils/stdafx.cpp Test_EllipseUtils/stdafx.h Test_EllipseUtils/Test_EllipseUtils.cpp)
+
+#add_executable(Test_EllipseUtils Test_EllipseUtils/stdafx.cpp Test_EllipseUtils/stdafx.h Test_EllipseUtils/Test_EllipseUtils.cpp)
+add_subdirectory(EllipseFitToSvg)

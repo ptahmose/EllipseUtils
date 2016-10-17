@@ -103,7 +103,7 @@ bool COptions::ParseCommandLine(int argc, char** argv)
 	return true;
 }
 
-CommandMode COptions::ParseCommandMode(const char* sz)
+/*static*/CommandMode COptions::ParseCommandMode(const char* sz)
 {
 	if (_stricmp("fit", sz) == 0)
 	{
@@ -117,12 +117,12 @@ CommandMode COptions::ParseCommandMode(const char* sz)
 	return CommandMode::None;
 }
 
-EllipseUtils::EllipseParameters<double> COptions::ParseEllipseParameters(const char* sz)
+/*static*/EllipseUtils::EllipseParameters<double> COptions::ParseEllipseParameters(const char* sz)
 {
 	return ParseEllipseParameters(std::string(sz));
 }
 
-EllipseUtils::EllipseParameters<double> COptions::ParseEllipseParameters(const std::string& sz)
+/*static*/EllipseUtils::EllipseParameters<double> COptions::ParseEllipseParameters(const std::string& sz)
 {
 	std::regex argsRegex("^([^,;|]*)[,;|]([^,;|]*)[,;|]([^,;|]*)[,;|]([^,;|]*)[,;|]([^,;|]*)$");
 	std::smatch pieces_match;
