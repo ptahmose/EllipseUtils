@@ -1,7 +1,7 @@
 #pragma once
 
 #include <limits>
-#include <math.h>
+#include <cmath>
 
 namespace EllipseUtils
 {
