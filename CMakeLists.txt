@@ -24,11 +24,11 @@ set(CMAKE_MODULE_PATH ./cmake)
 find_package(Eigen3 3.1.2)
 
 list(APPEND ADDITIONAL_INCLUDE_DIRECTORIES ${EIGEN3_INCLUDE_DIR})
-list(APPEND ADDITIONAL_INCLUDE_DIRECTORIES "./EllipseUtils")
+#list(APPEND ADDITIONAL_INCLUDE_DIRECTORIES "./EllipseUtils")
 
-include_directories("/usr/include/eigen3")
+#include_directories("/usr/include/eigen3")
 #include_directories(./EllipseUtils)
-#include_directories(ADDITIONAL_INCLUDE_DIRECTORIES)
+include_directories(${ADDITIONAL_INCLUDE_DIRECTORIES})
 
 message(${ADDITIONAL_INCLUDE_DIRECTORIES})
 
