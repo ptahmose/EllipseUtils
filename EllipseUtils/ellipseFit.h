@@ -132,7 +132,11 @@ namespace EllipseUtils
 			}
 
 			auto eigenVectors = eigenSolver.eigenvectors();
+#if __GNUC__
+			const Eigen::Matrix<tFloat, 3, 1> eigenVec = ((eigenSolver.eigenvectors()).block(3, 1, 0, indexPositiveEigenValue)).real();
+#else
 			const Eigen::Matrix<tFloat, 3, 1> eigenVec = ((eigenSolver.eigenvectors()).block<3, 1>(0, indexPositiveEigenValue)).real();
+#endif
 			const auto tv0 = -((matrixCInverse.transpose() * matrixb)*eigenVec);
 
 			return EllipseAlgebraicParameters<tFloat>
@@ -231,7 +235,7 @@ namespace EllipseUtils
 #if defined(_MSC_VER)
 				__assume(0);
 #elif defined(__GNUC__)
-				do { __builtin_unreachable(); } while (0)
+				do { __builtin_unreachable(); } while (0);
 #endif
 				return 0;
 			}
