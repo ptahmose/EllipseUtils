@@ -100,7 +100,7 @@ namespace EllipseUtils
 			}
 
 #if __GNUC__
-			const auto matrixb = scatterMatrix.block<3, 3>(3, 0);
+			const auto matrixb = scatterMatrix.block(3, 3, 3, 0);
 #else
 			const auto matrixb = scatterMatrix.block<3, 3>(3, 0);
 #endif
