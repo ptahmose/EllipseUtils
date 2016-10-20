@@ -103,7 +103,7 @@ namespace EllipseUtils
 			const auto matrixbtransposed = matrixb.transpose();
 			const auto matrixCInverse = (scatterMatrix.block<3, 3>(3, 3)).inverse();
 
-			const auto eigenR = CEllipseFit::MatrixConstant * ((scatterMatrix.block<3, 3>(0, 0) - matrixbtransposed * matrixCInverse * matrixb).transpose());
+			const auto eigenR = CEllipseFit::MatrixConstant * (((scatterMatrix).block<3, 3>(0, 0) - matrixbtransposed * matrixCInverse * matrixb).transpose());
 
 			Eigen::EigenSolver<Eigen::Matrix<tFloat, 3, 3>> eigenSolver;
 			eigenSolver.compute(eigenR, true);
@@ -119,7 +119,7 @@ namespace EllipseUtils
 				}
 			}
 
-			const Eigen::Matrix<tFloat, 3, 1> eigenVec = eigenSolver.eigenvectors().block<3, 1>(0, indexPositiveEigenValue).real();
+			const Eigen::Matrix<tFloat, 3, 1> eigenVec = (eigenSolver.eigenvectors()).block<3, 1>(0, indexPositiveEigenValue).real();
 			const auto tv0 = -((matrixCInverse.transpose() * matrixb)*eigenVec);
 
 			return EllipseAlgebraicParameters<tFloat>
