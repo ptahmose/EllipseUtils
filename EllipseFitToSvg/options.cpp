@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "options.h"
 #include "optionparser.h"
+#include "Utilities.h"
 #include <vector>
 #include <iostream>
 #include "../EllipseUtils/ellipseparams.h"
@@ -105,11 +106,11 @@ bool COptions::ParseCommandLine(int argc, char** argv)
 
 /*static*/CommandMode COptions::ParseCommandMode(const char* sz)
 {
-	if (_stricmp("fit", sz) == 0)
+	if (CUtilities::strcmp_caseinsensitive("fit", sz) == 0)
 	{
 		return CommandMode::FitPoints;
 	}
-	else if (_stricmp("gen", sz) == 0 || _stricmp("generate", sz) == 0)
+	else if (CUtilities::strcmp_caseinsensitive("gen", sz) == 0 || CUtilities::strcmp_caseinsensitive("generate", sz) == 0)
 	{
 		return CommandMode::GeneratePoints;
 	}

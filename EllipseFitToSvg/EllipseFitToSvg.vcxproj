@@ -320,6 +320,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Utilities.cpp" />
     <ClInclude Include="D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\optionparser.h" />
     <ClInclude Include="D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\options.h" />
     <ClInclude Include="D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\ReadPoints.h" />
@@ -331,6 +332,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\ReadPoints.cpp" />
     <ClCompile Include="D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\stdafx.cpp" />
     <ClCompile Include="D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\WriteSvg.cpp" />
+    <ClInclude Include="Utilities.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D:/DEV/GitHub/EllipseUtils/ZERO_CHECK.vcxproj">
