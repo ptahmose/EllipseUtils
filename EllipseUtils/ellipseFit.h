@@ -99,9 +99,9 @@ namespace EllipseUtils
 				}
 			}
 
-			const auto matrixb = (scatterMatrix.block<3, 3>(3, 0));
+			const auto matrixb = ((scatterMatrix).block<3, 3>(3, 0));
 			const auto matrixbtransposed = matrixb.transpose();
-			const auto matrixCInverse = (scatterMatrix.block<3, 3>(3, 3)).inverse();
+			const auto matrixCInverse = ((scatterMatrix).block<3, 3>(3, 3)).inverse();
 
 			const auto eigenR = CEllipseFit::MatrixConstant * (((scatterMatrix).block<3, 3>(0, 0) - matrixbtransposed * matrixCInverse * matrixb).transpose());
 
