@@ -120,7 +120,7 @@ namespace EllipseUtils
 			}
 
 			auto eigenVectors = eigenSolver.eigenvectors();
-			const Eigen::Matrix<tFloat, 3, 1> eigenVec = (eigenVectors).block<3, 1>(0, indexPositiveEigenValue).real();
+			const Eigen::Matrix<tFloat, 3, 1> eigenVec = ((eigenSolver.eigenvectors()).block<3, 1>(0, indexPositiveEigenValue)).real();
 			const auto tv0 = -((matrixCInverse.transpose() * matrixb)*eigenVec);
 
 			return EllipseAlgebraicParameters<tFloat>
