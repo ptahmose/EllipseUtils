@@ -99,11 +99,23 @@ namespace EllipseUtils
 				}
 			}
 
-			const auto matrixb = ((scatterMatrix).block<3, 3>(3, 0));
+#if __GNUC__
+			const auto matrixb = scatterMatrix.block<3, 3>(3, 0);
+#else
+			const auto matrixb = scatterMatrix.block<3, 3>(3, 0);
+#endif
 			const auto matrixbtransposed = matrixb.transpose();
+#if __GNUC__
+			const auto matrixCInverse = ((scatterMatrix).block(3, 3, 3, 3)).inverse();
+#else
 			const auto matrixCInverse = ((scatterMatrix).block<3, 3>(3, 3)).inverse();
+#endif
 
 			const auto eigenR = CEllipseFit::MatrixConstant * (((scatterMatrix).block<3, 3>(0, 0) - matrixbtransposed * matrixCInverse * matrixb).transpose());
+
+			Eigen::Array22f m;
+			m << 1, 2, 3, 4;
+			auto bl = m.block<2, 2>(1, 1);
 
 			Eigen::EigenSolver<Eigen::Matrix<tFloat, 3, 3>> eigenSolver;
 			eigenSolver.compute(eigenR, true);
@@ -125,12 +137,12 @@ namespace EllipseUtils
 
 			return EllipseAlgebraicParameters<tFloat>
 			{
-			 eigenVec(0) * sy*sy,
-			 eigenVec(1) * sx*sy,
-			 eigenVec(2) * sx*sx,
-			 -2 * eigenVec(0) * sy*sy*mx - eigenVec(1) * sx*sy*my + tv0(0) * sx*sy*sy,
-			 -eigenVec(1) * sx*sy*mx - 2 * eigenVec(2) * sx*sx*my + tv0(1) * sx*sx*sy,
-			 eigenVec(0) * sy*sy*mx*mx + eigenVec(1) * sx*sy*mx*my + eigenVec(2) * sx*sx*my*my - tv0(0) * sx*sy*sy*mx - tv0(1) * sx*sx*sy*my + tv0(2) * sx*sx*sy*sy
+				eigenVec(0) * sy*sy,
+					eigenVec(1) * sx*sy,
+					eigenVec(2) * sx*sx,
+					-2 * eigenVec(0) * sy*sy*mx - eigenVec(1) * sx*sy*my + tv0(0) * sx*sy*sy,
+					-eigenVec(1) * sx*sy*mx - 2 * eigenVec(2) * sx*sx*my + tv0(1) * sx*sx*sy,
+					eigenVec(0) * sy*sy*mx*mx + eigenVec(1) * sx*sy*mx*my + eigenVec(2) * sx*sx*my*my - tv0(0) * sx*sy*sy*mx - tv0(1) * sx*sx*sy*my + tv0(2) * sx*sx*sy*sy
 			};
 		}
 	private:
@@ -216,7 +228,11 @@ namespace EllipseUtils
 			case 5:
 				return 1;
 			default:
+#if defined(_MSC_VER)
 				__assume(0);
+#elif defined(__GNUC__)
+				do { __builtin_unreachable(); } while (0)
+#endif
 				return 0;
 			}
 		}
