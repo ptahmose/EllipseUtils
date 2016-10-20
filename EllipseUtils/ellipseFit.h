@@ -111,7 +111,11 @@ namespace EllipseUtils
 			const auto matrixCInverse = ((scatterMatrix).block<3, 3>(3, 3)).inverse();
 #endif
 
+#if __GNUC__
+			const auto eigenR = CEllipseFit::MatrixConstant * (((scatterMatrix).block(3, 3, 0, 0) - matrixbtransposed * matrixCInverse * matrixb).transpose());
+#else
 			const auto eigenR = CEllipseFit::MatrixConstant * (((scatterMatrix).block<3, 3>(0, 0) - matrixbtransposed * matrixCInverse * matrixb).transpose());
+#endif
 
 			Eigen::Array22f m;
 			m << 1, 2, 3, 4;
