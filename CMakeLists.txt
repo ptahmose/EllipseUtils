@@ -25,7 +25,8 @@ message(${EIGEN3_INCLUDE_DIR})
 #set(CMAKE_MODULE_PATH "./cmake")
 #list(APPEND CMAKE_MODULE_PATH "/home/jbohl/Dev/EllipseUtils/cmake")
 #CMAKE_MODULE_PATH "${CMAKE_SOURCE_PREFIX}")
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+#set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 
 find_package(Eigen3 3.1.2)
@@ -38,6 +39,19 @@ list(APPEND ADDITIONAL_INCLUDE_DIRECTORIES ${EIGEN3_INCLUDE_DIR})
 include_directories(${ADDITIONAL_INCLUDE_DIRECTORIES})
 
 message(${ADDITIONAL_INCLUDE_DIRECTORIES})
+
+
+
+macro(use_cxx11)
+  if (CMAKE_VERSION VERSION_LESS "3.1")
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+      set (CMAKE_CXX_FLAGS "--std=gnu++11 ${CMAKE_CXX_FLAGS}")
+    endif ()
+  else ()
+    set (CMAKE_CXX_STANDARD 11)
+  endif ()
+endmacro(use_cxx11)
+
 
 #set (CMAKE_CXX_FLAGS "--std=c++11")
 
