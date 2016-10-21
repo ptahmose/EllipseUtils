@@ -23,7 +23,7 @@ message(${EIGEN3_INCLUDE_DIR})
 
 #set(CMAKE_MODULE_PATH ${EIGEN3_INCLUDE_DIR}/cmake)
 #set(CMAKE_MODULE_PATH ./cmake)
-list(APPEND CMAKE_MODULE_PATH "./cmake"")
+list(APPEND CMAKE_MODULE_PATH "./cmake")
 
 find_package(Eigen3 3.1.2)
 
