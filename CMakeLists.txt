@@ -22,8 +22,11 @@ message(${EIGEN3_INCLUDE_DIR})
 #ENDIF()
 
 #set(CMAKE_MODULE_PATH ${EIGEN3_INCLUDE_DIR}/cmake)
-set(CMAKE_MODULE_PATH "./cmake")
+#set(CMAKE_MODULE_PATH "./cmake")
 #list(APPEND CMAKE_MODULE_PATH "/home/jbohl/Dev/EllipseUtils/cmake")
+CMAKE_MODULE_PATH "${CMAKE_SOURCE_PREFIX}")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
 
 find_package(Eigen3 3.1.2)
 
