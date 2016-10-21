@@ -32,8 +32,7 @@ include_directories(${ADDITIONAL_INCLUDE_DIRECTORIES})
 
 message(${ADDITIONAL_INCLUDE_DIRECTORIES})
 
-set (CMAKE_CXX_FLAGS "--std=c++11")
-
+#set (CMAKE_CXX_FLAGS "--std=c++11")
 
 #add_executable(Test_EllipseUtils Test_EllipseUtils/stdafx.cpp Test_EllipseUtils/stdafx.h Test_EllipseUtils/Test_EllipseUtils.cpp)
 
