@@ -29,6 +29,7 @@
 #pragma once
 
 #include "ellipseBasicTypes.h"
+#include <functional>
 
 namespace EllipseUtils
 {
@@ -72,11 +73,10 @@ namespace EllipseUtils
 			return p2;
 		}
 
-		template <typename tFloat>
-
 		/// Calculates the axis aligned bounding box which covers the specified ellipse.
 		/// \param ellP The ellipse.
 		/// \return The calculated axis aligned bounding box.
+		template <typename tFloat>
 		static Rect<tFloat> CalcAxisAlignedBoundingBox(const EllipseParameters<tFloat>& ellP)
 		{
 			tFloat a = ellP.a* cos(ellP.theta);
@@ -90,6 +90,48 @@ namespace EllipseUtils
 			return Rect<tFloat>{ x, y, width, height };
 		}
 
+
+		/// Calculate the coordinates of a point on the ellipse, as specified by the parameter t. The parameter t varies from 0 to 2*Pi.
+		/// \param 		    ellipseParams The parameters of the ellipse.
+		/// \param 		    t			  The parameter which is used to parametrize the ellipse, which varies from 0 to 2*Pi (aka parametric angle).
+		/// \param [in,out] pX			  If non-null, the x-coordinate will be stored here.
+		/// \param [in,out] pY			  If non-null, the y-coordinate will be stored here.
+		template <typename tFloat>
+		static void CalcPointOnEllipse(const EllipseParameters<tFloat>& ellipseParams, tFloat t, tFloat* pX, tFloat* pY)
+		{
+			tFloat sinTheta = sin(ellipseParams.theta);
+			tFloat cosTheta = cos(ellipseParams.theta);
+			tFloat sinT = sin(t);
+			tFloat cosT = cos(t);
+
+			if (pX != nullptr)
+			{
+				*pX = ellipseParams.x0 + ellipseParams.a*cosT*cosTheta - ellipseParams.b*sinT*sinTheta;
+			}
+
+			if (pY != nullptr)
+			{
+				*pY = ellipseParams.y0 + ellipseParams.a*cosT*sinTheta + ellipseParams.b*sinT*cosTheta;
+			}
+		}
+
+
+		template <typename tFloat>
+		static void SampleEllipse(const EllipseParameters<tFloat>& ellipseParams, int numberOfPointsToSample, std::function<bool(tFloat, tFloat)> funcPt)
+		{
+			tFloat increment = (2 * (tFloat)3.141592653589793238463) / (numberOfPointsToSample);
+			tFloat x, y;
+			for (int i = 0; i < numberOfPointsToSample; ++i)
+			{
+				tFloat t = i*increment;
+				CalcPointOnEllipse<tFloat>(ellipseParams, t, &x, &y);
+				bool b = funcPt(x, y);
+				if (b == false)
+				{
+					break;
+				}
+			}
+		}
 	private:
 		template <typename number> static number squared(number n)
 		{

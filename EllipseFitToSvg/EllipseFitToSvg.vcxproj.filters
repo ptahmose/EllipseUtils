@@ -44,9 +44,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\CMakeLists.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <Filter Include="Source Files">
       <UniqueIdentifier>{770C052C-BCAF-3614-8BA2-D7D551FEDAA2}</UniqueIdentifier>
     </Filter>

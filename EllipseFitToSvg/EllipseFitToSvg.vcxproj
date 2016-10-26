@@ -264,62 +264,6 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\CMakeLists.txt">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/DEV/GitHub/EllipseUtils/EllipseFitToSvg/CMakeLists.txt</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -HD:/DEV/GitHub/EllipseUtils -BD:/DEV/GitHub/EllipseUtils --check-stamp-file D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\CMakeFiles\generate.stamp
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/DEV/GitHub/EllipseUtils/EllipseFitToSvg/CMakeLists.txt;D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\CMakeLists.txt;D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\CMakeFiles\generate.stamp</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/DEV/GitHub/EllipseUtils/EllipseFitToSvg/CMakeLists.txt</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -HD:/DEV/GitHub/EllipseUtils -BD:/DEV/GitHub/EllipseUtils --check-stamp-file D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\CMakeFiles\generate.stamp
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/DEV/GitHub/EllipseUtils/EllipseFitToSvg/CMakeLists.txt;D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\CMakeLists.txt;D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\CMakeFiles\generate.stamp</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/DEV/GitHub/EllipseUtils/EllipseFitToSvg/CMakeLists.txt</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -HD:/DEV/GitHub/EllipseUtils -BD:/DEV/GitHub/EllipseUtils --check-stamp-file D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\CMakeFiles\generate.stamp
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/DEV/GitHub/EllipseUtils/EllipseFitToSvg/CMakeLists.txt;D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\CMakeLists.txt;D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\CMakeFiles\generate.stamp</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/DEV/GitHub/EllipseUtils/EllipseFitToSvg/CMakeLists.txt</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -HD:/DEV/GitHub/EllipseUtils -BD:/DEV/GitHub/EllipseUtils --check-stamp-file D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\CMakeFiles\generate.stamp
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/DEV/GitHub/EllipseUtils/EllipseFitToSvg/CMakeLists.txt;D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\CMakeLists.txt;D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\CMakeFiles\generate.stamp</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
-    </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="Utilities.cpp" />
     <ClInclude Include="D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\optionparser.h" />
     <ClInclude Include="D:\DEV\GitHub\EllipseUtils\EllipseFitToSvg\options.h" />

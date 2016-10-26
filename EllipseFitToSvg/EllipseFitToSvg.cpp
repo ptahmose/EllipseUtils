@@ -4,6 +4,7 @@
 #include "stdafx.h"
 
 #include <iostream>
+#include <random>
 
 #include "ReadPoints.h"
 #include "WriteSvg.h"
@@ -11,6 +12,7 @@
 #include "../EllipseUtils/ellipseUtils.h"
 
 using namespace std;
+using namespace EllipseUtils;
 
 static void DoFitPoints(const COptions& options);
 static void DoGeneratePoints(const COptions& options);
@@ -135,5 +137,22 @@ int main(int argc, char** argv)
 
 /*static*/void DoGeneratePoints(const COptions& options)
 {
+	GenerateEllipseParameters genParams = options.GetGenerateEllipseParameters();
 
+	std::mt19937 generator;
+	double mean = 0;
+	std::normal_distribution<double> normalDistX(mean, genParams.varianceX);
+	std::normal_distribution<double> normalDistY(mean, genParams.varianceY);
+
+	CEllipseUtilities::SampleEllipse<double>(
+		genParams.ellipseParameters,
+		genParams.numberOfPointsToSample,
+		[&](double x, double y)->bool
+			{
+				x += normalDistX(generator);
+				y += normalDistY(generator);
+				cout << x << " , " << y << endl;
+				return true;
+			}
+		);
 }

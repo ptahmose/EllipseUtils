@@ -32,6 +32,15 @@ COptions::COptions()
 	: cmdMode(CommandMode::None),
 	fitPointsOutputMode(FitPointsOutputMode::None)
 {
+	this->genEllipseParameters.ellipseParameters.a = 100;
+	this->genEllipseParameters.ellipseParameters.b = 100;
+	this->genEllipseParameters.ellipseParameters.x0 = 0;
+	this->genEllipseParameters.ellipseParameters.y0 = 0;
+	this->genEllipseParameters.ellipseParameters.theta = 0;
+
+	this->genEllipseParameters.numberOfPointsToSample = 100;
+	this->genEllipseParameters.varianceX = 1;
+	this->genEllipseParameters.varianceY = 1;
 }
 
 bool COptions::ParseCommandLine(int argc, char** argv)
