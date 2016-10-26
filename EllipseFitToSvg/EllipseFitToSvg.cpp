@@ -141,8 +141,8 @@ int main(int argc, char** argv)
 
 	std::mt19937 generator;
 	double mean = 0;
-	std::normal_distribution<double> normalDistX(mean, genParams.varianceX);
-	std::normal_distribution<double> normalDistY(mean, genParams.varianceY);
+	std::normal_distribution<double> normalDistX(mean, genParams.stdDevX);
+	std::normal_distribution<double> normalDistY(mean, genParams.stdDevY);
 
 	CEllipseUtilities::SampleEllipse<double>(
 		genParams.ellipseParameters,

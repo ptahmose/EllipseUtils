@@ -39,8 +39,8 @@ COptions::COptions()
 	this->genEllipseParameters.ellipseParameters.theta = 0;
 
 	this->genEllipseParameters.numberOfPointsToSample = 100;
-	this->genEllipseParameters.varianceX = 1;
-	this->genEllipseParameters.varianceY = 1;
+	this->genEllipseParameters.stdDevX = 1;
+	this->genEllipseParameters.stdDevY = 1;
 }
 
 bool COptions::ParseCommandLine(int argc, char** argv)

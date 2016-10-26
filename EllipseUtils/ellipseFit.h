@@ -118,9 +118,9 @@ namespace EllipseUtils
 			const auto eigenR = CEllipseFit::MatrixConstant * (((scatterMatrix).block<3, 3>(0, 0) - matrixbtransposed * matrixCInverse * matrixb).transpose());
 #endif
 
-			Eigen::Array22f m;
-			m << 1, 2, 3, 4;
-			auto bl = m.block<2, 2>(1, 1);
+			//Eigen::Array22f m;
+			//m << 1, 2, 3, 4;
+			//auto bl = m.block<2, 2>(1, 1);
 
 			Eigen::EigenSolver<Eigen::Matrix<tFloat, 3, 3>> eigenSolver;
 			eigenSolver.compute(eigenR, true);

@@ -7,7 +7,7 @@ CReadPoints::CReadPoints()
 {
 }
 
-void CReadPoints::Read(std::istream& stream,std::function<void(double, double)> addPoint)
+void CReadPoints::Read(std::istream& stream, std::function<void(double, double)> addPoint)
 {
 	std::string line;
 	while (std::getline(stream, line))
@@ -61,12 +61,26 @@ bool CReadPoints::SplitIntoTwoStrings(const std::string str, std::string& pt1, s
 		pt1 += c;
 	}
 
-	++it;
+	if (*it == ' ')
+	{
+		for (++it;; ++it)
+		{
+			if (it == str.cend())
+				return false;
+
+			char c = *it;
+			if (c != ' ' && c != ',' && c != ';')
+			{
+				break;
+			}
+		}
+	}
+
 	std::copy(it, str.cend(), std::back_inserter(pt2));
 	return true;
 }
 
-bool CReadPoints::String_to_double(const std::string& s,double& d)
+bool CReadPoints::String_to_double(const std::string& s, double& d)
 {
 	std::istringstream i(s);
 	if (!(i >> d))

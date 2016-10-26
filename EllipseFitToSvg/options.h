@@ -23,7 +23,7 @@ struct GenerateEllipseParameters
 
 	EllipseUtils::EllipseParameters<double> ellipseParameters;
 
-	double varianceX, varianceY;
+	double stdDevX, stdDevY;
 };
 
 inline FitPointsOutputMode operator | (FitPointsOutputMode lhs, FitPointsOutputMode rhs)
