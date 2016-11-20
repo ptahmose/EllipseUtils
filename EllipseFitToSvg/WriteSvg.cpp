@@ -35,7 +35,7 @@ CWriteSvg::CWriteSvg(std::ostream& stream) :stream(stream)
 {
 }
 
-void CWriteSvg::Write(std::function<bool(int, double&, double&)> getPoints, const EllipseUtils::EllipseParameters<double>* ellipseParameters)
+void CWriteSvg::Write(std::function<bool(size_t, double&, double&)> getPoints, const EllipseUtils::EllipseParameters<double>* ellipseParameters)
 {
 	auto viewBox = CalcViewbox(getPoints, ellipseParameters);
 	this->WriteProlog(viewBox);
@@ -50,7 +50,7 @@ void CWriteSvg::Write(std::function<bool(int, double&, double&)> getPoints, cons
 	this->WriteEpilog();
 }
 
-EllipseUtils::Rect<int> CWriteSvg::CalcViewbox(const std::function<bool(int, double&, double&)>& function, const EllipseUtils::EllipseParameters<double>* ellipse_parameters)
+EllipseUtils::Rect<int> CWriteSvg::CalcViewbox(const std::function<bool(size_t, double&, double&)>& function, const EllipseUtils::EllipseParameters<double>* ellipse_parameters)
 {
 	if (ellipse_parameters != nullptr)
 	{
@@ -85,9 +85,9 @@ void CWriteSvg::WriteEllipse(const EllipseUtils::EllipseParameters<double>& elli
 	this->stream << R"(</g>)" << endl;
 }
 
-void CWriteSvg::WritePoints(const std::function<bool(int, double&, double&)>& function)
+void CWriteSvg::WritePoints(const std::function<bool(size_t, double&, double&)>& function)
 {
-	for (int i = 0;; ++i)
+	for (size_t i = 0;; ++i)
 	{
 		double x, y;
 		if (function(i, x, y) != true)

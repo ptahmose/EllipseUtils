@@ -11,12 +11,12 @@ private:
 public:
 	CWriteSvg(std::ostream& stream);
 
-	void Write(std::function<bool(int, double&, double&)> getPoints, const EllipseUtils::EllipseParameters<double>* ellipseParameters);
+	void Write(std::function<bool(size_t, double&, double&)> getPoints, const EllipseUtils::EllipseParameters<double>* ellipseParameters);
 
 private:
 	void WriteProlog(const EllipseUtils::Rect<int>& viewBox);
 	void WriteEpilog();
-	void WritePoints(const std::function<bool(int, double&, double&)>& function);
+	void WritePoints(const std::function<bool(size_t, double&, double&)>& function);
 	void WriteEllipse(const EllipseUtils::EllipseParameters<double>& ellipseParameters);
-	EllipseUtils::Rect<int> CalcViewbox(const std::function<bool(int, double&, double&)>& function, const EllipseUtils::EllipseParameters<double>* ellipse_parameters);
+	EllipseUtils::Rect<int> CalcViewbox(const std::function<bool(size_t, double&, double&)>& function, const EllipseUtils::EllipseParameters<double>* ellipse_parameters);
 };

@@ -115,7 +115,7 @@ int main(int argc, char** argv)
 
 		CWriteSvg writeSvg(*ostream);
 		writeSvg.Write(
-			[&](int idx, double& x, double& y)->bool
+			[&](size_t idx, double& x, double& y)->bool
 		{
 			if (idx >= std::get<0>(points).size())
 			{
