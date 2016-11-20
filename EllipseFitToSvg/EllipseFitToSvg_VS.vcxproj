@@ -154,9 +154,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="optionparser.h" />
     <ClInclude Include="options.h" />
     <ClInclude Include="ReadPoints.h" />
