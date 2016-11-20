@@ -8,8 +8,13 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
 #	message("Environment variable was set")
 #endif
 
-if(!EIGEN3_INCLUDE_DIR)
-  message("Please specify the path where Eigen3 is found -e. g. 'cmake -D EIGEN3_INCLUDE_DIR=/usr/include/eigen3'")
+if(NOT EIGEN3_INCLUDE_DIR)
+  if (DEFINED ENV{EIGEN3_INCLUDE_DIR})
+    set(EIGEN3_INCLUDE_DIR "$ENV{EIGEN3_INCLUDE_DIR}")
+  endif()
+  if (NOT EIGEN3_INCLUDE_DIR)
+    message(FATAL_ERROR "Please specify the path where Eigen3 is found - either by specifying it on the command-line, or by defining an environment variable (e. g. 'cmake -DEIGEN3_INCLUDE_DIR=/usr/include/eigen3')")
+  endif()
 endif()
 
 #SET( EIGEN3_INCLUDE_DIR "$ENV{EIGEN3_INCLUDE_DIR}" )
