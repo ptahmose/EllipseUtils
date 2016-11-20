@@ -40,3 +40,7 @@ endmacro(use_cxx11)
 
 
 add_subdirectory(EllipseFitToSvg)
+
+set_target_properties(EllipseFitToSvg 
+	PROPERTIES
+	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Build/EllipseFitToSvg/")
