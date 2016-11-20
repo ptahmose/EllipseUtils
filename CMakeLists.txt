@@ -4,6 +4,12 @@ project (EllipseUtils)
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
 
+if( NOT CMAKE_BUILD_TYPE )
+  set( CMAKE_BUILD_TYPE Debug CACHE STRING
+       "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
+       FORCE )
+endif()
+
 if(NOT EIGEN3_INCLUDE_DIR)
   if (DEFINED ENV{EIGEN3_INCLUDE_DIR})
     set(EIGEN3_INCLUDE_DIR "$ENV{EIGEN3_INCLUDE_DIR}")
