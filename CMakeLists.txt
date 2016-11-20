@@ -4,10 +4,6 @@ project (EllipseUtils)
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
 
-#if ($ENV{EIGEN3_INCLUDE_DIR})
-#	message("Environment variable was set")
-#endif
-
 if(NOT EIGEN3_INCLUDE_DIR)
   if (DEFINED ENV{EIGEN3_INCLUDE_DIR})
     set(EIGEN3_INCLUDE_DIR "$ENV{EIGEN3_INCLUDE_DIR}")
@@ -17,33 +13,18 @@ if(NOT EIGEN3_INCLUDE_DIR)
   endif()
 endif()
 
-#SET( EIGEN3_INCLUDE_DIR "$ENV{EIGEN3_INCLUDE_DIR}" )
-#list(APPEND CMAKE_MODULE_PATH /usr/include/eigen3)
 list(APPEND CMAKE_PREFIX_PATH ${EIGEN3_INCLUDE_DIR})
 message(${EIGEN3_INCLUDE_DIR})
 
-#IF( NOT EIGEN3_INCLUDE_DIR )
-#    MESSAGE( FATAL_ERROR "Please point the environment variable EIGEN3_INCLUDE_DIR to the include directory of your Eigen3 installation.")
-#ENDIF()
-
-#set(CMAKE_MODULE_PATH ${EIGEN3_INCLUDE_DIR}/cmake)
-#set(CMAKE_MODULE_PATH "./cmake")
-#list(APPEND CMAKE_MODULE_PATH "/home/jbohl/Dev/EllipseUtils/cmake")
-#CMAKE_MODULE_PATH "${CMAKE_SOURCE_PREFIX}")
-#set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-
 
 find_package(Eigen3 3.1.2)
 
 list(APPEND ADDITIONAL_INCLUDE_DIRECTORIES ${EIGEN3_INCLUDE_DIR})
-#list(APPEND ADDITIONAL_INCLUDE_DIRECTORIES "./EllipseUtils")
 
-#include_directories("/usr/include/eigen3")
-#include_directories(./EllipseUtils)
 include_directories(${ADDITIONAL_INCLUDE_DIRECTORIES})
 
-message(${ADDITIONAL_INCLUDE_DIRECTORIES})
+#message(${ADDITIONAL_INCLUDE_DIRECTORIES})
 
 
 
@@ -58,9 +39,4 @@ macro(use_cxx11)
 endmacro(use_cxx11)
 
 
-#set (CMAKE_CXX_FLAGS "--std=c++11")
-
-#add_executable(Test_EllipseUtils Test_EllipseUtils/stdafx.cpp Test_EllipseUtils/stdafx.h Test_EllipseUtils/Test_EllipseUtils.cpp)
-
-#add_executable(Test_EllipseUtils Test_EllipseUtils/stdafx.cpp Test_EllipseUtils/stdafx.h Test_EllipseUtils/Test_EllipseUtils.cpp)
 add_subdirectory(EllipseFitToSvg)

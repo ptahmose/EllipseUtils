@@ -33,8 +33,6 @@
 
 namespace EllipseUtils
 {
-
-
 	class CEllipseUtilities
 	{
 	public:
