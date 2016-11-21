@@ -50,3 +50,5 @@ add_subdirectory(EllipseFitToSvg)
 set_target_properties(EllipseFitToSvg 
 	PROPERTIES
 	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Build/EllipseFitToSvg/")
+
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/Test" DESTINATION "${CMAKE_BINARY_DIR}/")
