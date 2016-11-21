@@ -100,23 +100,23 @@ namespace EllipseUtils
 				}
 			}
 
-#if __GNUC__
-			const auto matrixb = scatterMatrix.block(3, 3, 3, 0);
-#else
+//#if __GNUC__
+//			const auto matrixb = scatterMatrix.block(3, 3, 3, 0);
+//#else
 			const auto matrixb = scatterMatrix.block<3, 3>(3, 0);
-#endif
+//#endif
 			const auto matrixbtransposed = matrixb.transpose();
-#if __GNUC__
-			const auto matrixCInverse = ((scatterMatrix).block(3, 3, 3, 3)).inverse();
-#else
+//#if __GNUC__
+//			const auto matrixCInverse = ((scatterMatrix).block(3, 3, 3, 3)).inverse();
+//#else
 			const auto matrixCInverse = ((scatterMatrix).block<3, 3>(3, 3)).inverse();
-#endif
+//#endif
 
-#if __GNUC__
-			const auto eigenR = CEllipseFit::MatrixConstant * (((scatterMatrix).block(3, 3, 0, 0) - matrixbtransposed * matrixCInverse * matrixb).transpose());
-#else
+//#if __GNUC__
+//			const auto eigenR = CEllipseFit::MatrixConstant * (((scatterMatrix).block(3, 3, 0, 0) - matrixbtransposed * matrixCInverse * matrixb).transpose());
+//#else
 			const auto eigenR = CEllipseFit::MatrixConstant * (((scatterMatrix).block<3, 3>(0, 0) - matrixbtransposed * matrixCInverse * matrixb).transpose());
-#endif
+//#endif
 
 			//Eigen::Array22f m;
 			//m << 1, 2, 3, 4;
@@ -137,11 +137,11 @@ namespace EllipseUtils
 			}
 
 			auto eigenVectors = eigenSolver.eigenvectors();
-#if __GNUC__
-			const Eigen::Matrix<tFloat, 3, 1> eigenVec = ((eigenSolver.eigenvectors()).block(3, 1, 0, indexPositiveEigenValue)).real();
-#else
+//#if __GNUC__
+//			const Eigen::Matrix<tFloat, 3, 1> eigenVec = ((eigenSolver.eigenvectors()).block(3, 1, 0, indexPositiveEigenValue)).real();
+//#else
 			const Eigen::Matrix<tFloat, 3, 1> eigenVec = ((eigenSolver.eigenvectors()).block<3, 1>(0, indexPositiveEigenValue)).real();
-#endif
+//#endif
 			const auto tv0 = -((matrixCInverse.transpose() * matrixb)*eigenVec);
 
 			return EllipseAlgebraicParameters<tFloat>
