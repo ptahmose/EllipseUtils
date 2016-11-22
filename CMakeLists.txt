@@ -36,7 +36,7 @@ include_directories(${ADDITIONAL_INCLUDE_DIRECTORIES})
 
 macro(use_cxx11)
   if (CMAKE_VERSION VERSION_LESS "3.1")
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" || CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
       set (CMAKE_CXX_FLAGS "--std=c++11 ${CMAKE_CXX_FLAGS}")
     endif ()
   else ()
