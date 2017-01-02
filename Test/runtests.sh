@@ -1,5 +1,8 @@
 #!/bin/bash
-EXECUTABLE=../Build/EllipseFitToSvg/EllipseFitToSvg
+
+cd "${BASH_SOURCE%/*}" || exit
+
+EXECUTABLE="../Build/EllipseFitToSvg/EllipseFitToSvg"
 
 mkdir -p ./Results
 
