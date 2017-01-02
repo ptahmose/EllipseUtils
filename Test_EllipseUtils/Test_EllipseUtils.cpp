@@ -60,7 +60,7 @@ static bool TestEllipseUtils_2(const COptions& opts)
 		fabs(e.y0 - 486.678f) < 0.001f &&
 		fabs(e.a - 490.003f) < 0.001f &&
 		fabs(e.b - 440.873f) < 0.001f &&
-		fabs(e.theta - (1.87758f)) < 0.0001f;
+		fabs(e.theta - 1.87758f) < 0.0001f;
 
 	if (opts.VerboseLog() == true)
 	{
