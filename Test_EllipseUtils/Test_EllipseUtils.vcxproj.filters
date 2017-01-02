@@ -42,12 +42,18 @@
     <ClInclude Include="..\EllipseUtils\ellipseBasicTypes.h">
       <Filter>Header Files\EllipseUtils</Filter>
     </ClInclude>
+    <ClInclude Include="optionparser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Test_EllipseUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="options.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

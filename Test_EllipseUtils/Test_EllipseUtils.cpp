@@ -56,11 +56,11 @@ static bool TestEllipseUtils_2(const COptions& opts)
 	}
 
 	bool isCorrect =
-		fabs(e.x0 - 960.443298f) < 0.0001f &&
-		fabs(e.y0 - 486.677917f) < 0.0001f &&
-		fabs(e.a - 490.002533f) < 0.0001f &&
-		fabs(e.b - 440.873077f) < 0.0001f &&
-		fabs(e.theta - (1.87757611f)) < 0.0001f;
+		fabs(e.x0 - 960.444f) < 0.001f &&
+		fabs(e.y0 - 486.678f) < 0.001f &&
+		fabs(e.a - 490.003f) < 0.001f &&
+		fabs(e.b - 440.873f) < 0.001f &&
+		fabs(e.theta - (1.87758f)) < 0.0001f;
 
 	if (opts.VerboseLog() == true)
 	{
@@ -70,13 +70,25 @@ static bool TestEllipseUtils_2(const COptions& opts)
 	return isCorrect;
 }
 
+static void PrintResult(int testNo,bool  success)
+{
+	cout << "Test " << testNo << " :" << (success ? "PASS" : "FAIL") << endl;
+}
 
-int main()
+int main(int argc,char** argv)
 {
 	COptions options;
-	bool b = TestEllipseUtils_1(options);
+	bool b = options.ParseCommandLine(argc, argv);
+	if (b!=true)
+	{
+		return 1;
+	}
+
+	b = TestEllipseUtils_1(options);
+	PrintResult(1, b);
 
 	b = TestEllipseUtils_2(options);
+	PrintResult(2, b);
 
 	return 0;
 }

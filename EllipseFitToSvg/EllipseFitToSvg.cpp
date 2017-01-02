@@ -30,6 +30,8 @@ int main(int argc, char** argv)
 	case CommandMode::GeneratePoints:
 		DoGeneratePoints(options);
 		break;
+	default:
+		break;
 	}
 
 #if false

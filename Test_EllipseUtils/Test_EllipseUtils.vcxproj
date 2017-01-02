@@ -160,10 +160,12 @@
     <ClInclude Include="..\EllipseUtils\ellipseUtilities.h" />
     <ClInclude Include="..\EllipseUtils\ellipseUtils.h" />
     <ClInclude Include="options.h" />
+    <ClInclude Include="optionparser.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="options.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

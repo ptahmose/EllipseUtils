@@ -3,6 +3,10 @@
 
 class COptions
 {
+private:
+	bool verboseLog;
 public:
-	bool VerboseLog() const { return true; }
+	bool ParseCommandLine(int argc, char** argv);
+	
+	bool VerboseLog() const { return this->verboseLog; }
 };
