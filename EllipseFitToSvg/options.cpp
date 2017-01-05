@@ -47,7 +47,7 @@ bool COptions::ParseCommandLine(int argc, char** argv)
 {
 	enum  optionIndex { UNKNOWN, HELP, COMMAND, INPUTPOINTS, FILENAMESVGOUTPUT, GENERATEPOINTS_ELLIPSEPARAMS };
 
-	const option::Descriptor usage[] =
+	static const option::Descriptor usage[] =
 	{
 		{ UNKNOWN, 0,"" , ""    ,option::Arg::None, "USAGE: example [options]\n\n"
 		"Options:" },

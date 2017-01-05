@@ -72,13 +72,13 @@ static bool TestEllipseUtils_2(const COptions& opts)
 
 static void PrintResult(int testNo,bool  success)
 {
-	cout << "Test " << testNo << " :" << (success ? "PASS" : "FAIL") << endl;
+	cout << "Test " << testNo << " : " << (success ? "PASS" : "FAIL") << endl;
 }
 
 int main(int argc,char** argv)
 {
 	COptions options;
-	bool b = options.ParseCommandLine(argc, argv);
+	bool b = options.ParseCommandLine(argc - 1, argv + 1);
 	if (b!=true)
 	{
 		return 1;
