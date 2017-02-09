@@ -141,15 +141,38 @@ int main(int argc, char** argv)
 {
 	GenerateEllipseParameters genParams = options.GetGenerateEllipseParameters();
 
-	std::mt19937 generator;
-	double mean = 0;
-	std::normal_distribution<double> normalDistX(mean, genParams.stdDevX);
-	std::normal_distribution<double> normalDistY(mean, genParams.stdDevY);
+	if (genParams.stdDevX == 0 && genParams.stdDevY == 0)
+	{
+		CEllipseUtilities::SampleEllipse<double>(
+			genParams.ellipseParameters,
+			genParams.numberOfPointsToSample,
+			[&](double x, double y)->bool
+			{
+				cout << x << " , " << y << endl;
+				return true;
+			}
+		);
+	}
+	else
+	{
+		std::mt19937 generator;
+		if (genParams.rng_seed_valid)
+		{
+			generator.seed(genParams.rng_seed);
+		}
+		else
+		{
+			generator.seed(std::random_device()());
+		}
 
-	CEllipseUtilities::SampleEllipse<double>(
-		genParams.ellipseParameters,
-		genParams.numberOfPointsToSample,
-		[&](double x, double y)->bool
+		const double mean = 0;
+		std::normal_distribution<double> normalDistX(mean, genParams.stdDevX);
+		std::normal_distribution<double> normalDistY(mean, genParams.stdDevY);
+
+		CEllipseUtilities::SampleEllipse<double>(
+			genParams.ellipseParameters,
+			genParams.numberOfPointsToSample,
+			[&](double x, double y)->bool
 			{
 				x += normalDistX(generator);
 				y += normalDistY(generator);
@@ -157,4 +180,5 @@ int main(int argc, char** argv)
 				return true;
 			}
 		);
+	}
 }

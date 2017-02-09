@@ -39,26 +39,34 @@ COptions::COptions()
 	this->genEllipseParameters.ellipseParameters.theta = 0;
 
 	this->genEllipseParameters.numberOfPointsToSample = 100;
-	this->genEllipseParameters.stdDevX = 1;
-	this->genEllipseParameters.stdDevY = 1;
+	this->genEllipseParameters.stdDevX = 0;
+	this->genEllipseParameters.stdDevY = 0;
+	this->genEllipseParameters.rng_seed_valid = false;
 }
 
 bool COptions::ParseCommandLine(int argc, char** argv)
 {
-	enum  optionIndex { UNKNOWN, HELP, COMMAND, INPUTPOINTS, FILENAMESVGOUTPUT, GENERATEPOINTS_ELLIPSEPARAMS };
+	enum  optionIndex { UNKNOWN, HELP, COMMAND, INPUTPOINTS, FILENAMESVGOUTPUT, GENERATEPOINTS_ELLIPSEPARAMS, ERRORFORPOINTS, ERRORFORPOINTSSEED };
 
 	static const option::Descriptor usage[] =
 	{
-		{ UNKNOWN, 0,"" , ""    ,option::Arg::None, "USAGE: example [options]\n\n"
+		{ UNKNOWN, 0,"" , ""    ,option::Arg::None, "USAGE: EllipseFitToSvg [options]\n\n"
+		"This program will read a list of points, fit an ellipse to it, and can write\n"
+		"out a SVG-graphic with the result.\n"
+		"In addition, it can generate a list of points from a definition of an ellipse\n"
+		"(optionally with some added noise) - in order to test the fit.\n\n\n"
 		"Options:" },
 		{ HELP,    0,"" , "help",option::Arg::None, "  --help  \tPrint usage and exit." },
 		{ COMMAND,    0,"c", "command",Arg::Required, "  --command, -c  \tMay either be 'fit' or 'generate'." },
 		{ INPUTPOINTS,    0,"i", "input",Arg::Required, "  --input, -i  \tThe input file." },
 		{ FILENAMESVGOUTPUT,0,"s","svgoutput",Arg::Required, "  --svgoutput, -s  \tThe SVG-output filename." },
-		{ GENERATEPOINTS_ELLIPSEPARAMS ,0,"e","ellipseparams",Arg::Required, "  --ellipseparams, -e  \t[only valid in case of 'generate'] The parameters of the ellipse are given as a list of 5 numbers, in the form 'x0,y0,a,b,angle'."},
+		{ GENERATEPOINTS_ELLIPSEPARAMS ,0,"p","ellipseparams",Arg::Required, "  --ellipseparams, -p  \t[only valid in case of 'generate'] The parameters of the ellipse are given as a list of 5 numbers, in the form 'x0,y0,a,b,angle'."
+			" The angle argument may be followed by 'deg' or 'degree' in which case it is interpreted as given in degree, otherwise in radians."},
+		{ ERRORFORPOINTS,0,"e","error",Arg::Required,"  --error, -e  \t[only valid in case of 'generate'] Gives the standard-deviation of a noise  which will added to the generated points."},
+		{ ERRORFORPOINTSSEED,0,"r","rndseed",Arg::Required,"  --rndseed, -r  \t[only valid in case of 'generate'] Gives the seed for the randon number generator to create the noise." },
 		{ UNKNOWN, 0,"" ,  ""   ,option::Arg::None, "\nExamples:\n"
-		"  example --unknown -- --this_is_no_option\n"
-		"  example -unk --plus -ppp file1 file2\n" },
+		"  EllipseFitToSvg --command fit --input points.txt\n"
+		"  EllipseFitToSvg --command generate --ellipseparams 100,100,40,50,30\n" },
 		{ 0,0,0,0,0,0 }
 	};
 
@@ -72,7 +80,8 @@ bool COptions::ParseCommandLine(int argc, char** argv)
 	if (parse.error())
 		return false;
 
-	if (options[HELP] || argc == 0) {
+	if (options[HELP] || argc == 0)
+	{
 		option::printUsage(std::cout, usage);
 		return false;
 	}
@@ -80,7 +89,7 @@ bool COptions::ParseCommandLine(int argc, char** argv)
 	for (int i = 0; i < parse.optionsCount(); ++i)
 	{
 		option::Option& opt = buffer[i];
-		//fprintf(stdout, "Argument #%d is ", i);
+
 		switch (opt.index())
 		{
 		case COMMAND:
@@ -99,7 +108,22 @@ bool COptions::ParseCommandLine(int argc, char** argv)
 			{
 				return false;
 			}
+			break;
+		case ERRORFORPOINTS:
+			if (!ParseDouble(opt.arg, &this->genEllipseParameters.stdDevX))
+			{
+				return false;
+			}
 
+			this->genEllipseParameters.stdDevY = this->genEllipseParameters.stdDevX;
+			break;
+		case ERRORFORPOINTSSEED:
+			if (!ParseUint32(opt.arg,&this->genEllipseParameters.rng_seed))
+			{
+				return false;
+			}
+
+			this->genEllipseParameters.rng_seed_valid = true;
 			break;
 		}
 	}
@@ -108,7 +132,6 @@ bool COptions::ParseCommandLine(int argc, char** argv)
 	{
 		this->fitPointsOutputMode |= FitPointsOutputMode::WriteResultToStdout;
 	}
-
 
 	return true;
 }
@@ -232,6 +255,30 @@ bool COptions::ParseCommandLine(int argc, char** argv)
 	if (ptrDbl != nullptr)
 	{
 		*ptrDbl = parsed;
+	}
+
+	return true;
+}
+
+/*static*/bool COptions::ParseUint32(const std::string& s, std::uint32_t* ptrUint32)
+{
+	std::istringstream iss(s);
+	std::uint32_t parsed;
+	if (!(iss >> parsed))
+	{
+		// couldn't parse an uint32
+		return false;
+	}
+
+	if (!(iss >> std::ws && iss.eof()))
+	{
+		// something after the double that wasn't whitespace
+		return false;
+	}
+
+	if (ptrUint32 != nullptr)
+	{
+		*ptrUint32 = parsed;
 	}
 
 	return true;

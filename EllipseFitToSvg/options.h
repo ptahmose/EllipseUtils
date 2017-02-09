@@ -24,6 +24,9 @@ struct GenerateEllipseParameters
 	EllipseUtils::EllipseParameters<double> ellipseParameters;
 
 	double stdDevX, stdDevY;
+
+	bool rng_seed_valid;
+	std::uint32_t rng_seed;
 };
 
 inline FitPointsOutputMode operator | (FitPointsOutputMode lhs, FitPointsOutputMode rhs)
@@ -68,4 +71,5 @@ private:
 	static EllipseUtils::EllipseParameters<double> ParseEllipseParameters(const char* sz);
 	static EllipseUtils::EllipseParameters<double> ParseEllipseParameters(const std::string& sz);
 	static bool ParseDouble(const std::string& s,double* ptrDbl);
+	static bool ParseUint32(const std::string& s, std::uint32_t* ptrUint32);
 };
