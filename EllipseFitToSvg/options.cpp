@@ -27,6 +27,22 @@ struct Arg : public option::Arg
 	}
 };
 
+static const char* FindArgAndGiveLongOpt(const option::Descriptor* options, int index)
+{
+	for (;; ++options)
+	{
+		if (options->index == index)
+		{
+			return options->longopt;
+		}
+
+		if (options->shortopt == nullptr)
+		{
+			return "?";
+		}
+	}
+}
+
 
 COptions::COptions()
 	: cmdMode(CommandMode::None),
@@ -58,8 +74,8 @@ bool COptions::ParseCommandLine(int argc, char** argv)
 		"Options:" },
 		{ HELP,    0,"" , "help",option::Arg::None, "  --help  \tPrint usage and exit." },
 		{ COMMAND,    0,"c", "command",Arg::Required, "  --command, -c  \tMay either be 'fit' or 'generate'." },
-		{ INPUTPOINTS,    0,"i", "input",Arg::Required, "  --input, -i  \tThe input file." },
-		{ FILENAMESVGOUTPUT,0,"s","svgoutput",Arg::Required, "  --svgoutput, -s  \tThe SVG-output filename." },
+		{ INPUTPOINTS,    0,"i", "input",Arg::Required, "  --input, -i  \t[only valid in case of 'fit'] The input file." },
+		{ FILENAMESVGOUTPUT,0,"s","svgoutput",Arg::Required, "  --svgoutput, -s  \t[only valid in case of 'fit'] The SVG-output filename." },
 		{ GENERATEPOINTS_ELLIPSEPARAMS ,0,"p","ellipseparams",Arg::Required, "  --ellipseparams, -p  \t[only valid in case of 'generate'] The parameters of the ellipse are given as a list of 5 numbers, in the form 'x0,y0,a,b,angle'."
 			" The angle argument may be followed by 'deg' or 'degree' in which case it is interpreted as given in degree, otherwise in radians."},
 		{ ERRORFORPOINTS,0,"e","error",Arg::Required,"  --error, -e  \t[only valid in case of 'generate'] Gives the standard-deviation of a noise  which will added to the generated points."},
@@ -94,6 +110,12 @@ bool COptions::ParseCommandLine(int argc, char** argv)
 		{
 		case COMMAND:
 			this->cmdMode = ParseCommandMode(opt.arg);
+			if (this->cmdMode == CommandMode::None)
+			{
+				fprintf(stderr, "Invalid argument for '%s': \"%s\".\n", FindArgAndGiveLongOpt(usage, COMMAND), opt.arg);
+				return false;
+			}
+
 			break;
 		case INPUTPOINTS:
 			this->filenamePoints = opt.arg;
@@ -106,20 +128,24 @@ bool COptions::ParseCommandLine(int argc, char** argv)
 			this->ellipseParameters = ParseEllipseParameters(opt.arg);
 			if (!this->ellipseParameters.IsValid())
 			{
+				fprintf(stderr, "Invalid argument for '%s': \"%s\"\n", FindArgAndGiveLongOpt(usage, GENERATEPOINTS_ELLIPSEPARAMS), opt.arg);
 				return false;
 			}
+
 			break;
 		case ERRORFORPOINTS:
 			if (!ParseDouble(opt.arg, &this->genEllipseParameters.stdDevX))
 			{
+				fprintf(stderr, "Invalid argument for '%s': \"%s\"\n", FindArgAndGiveLongOpt(usage, ERRORFORPOINTS), opt.arg);
 				return false;
 			}
 
 			this->genEllipseParameters.stdDevY = this->genEllipseParameters.stdDevX;
 			break;
 		case ERRORFORPOINTSSEED:
-			if (!ParseUint32(opt.arg,&this->genEllipseParameters.rng_seed))
+			if (!ParseUint32(opt.arg, &this->genEllipseParameters.rng_seed))
 			{
+				fprintf(stderr, "Invalid argument for '%s': \"%s\"\n", FindArgAndGiveLongOpt(usage, ERRORFORPOINTSSEED), opt.arg);
 				return false;
 			}
 
@@ -131,6 +157,12 @@ bool COptions::ParseCommandLine(int argc, char** argv)
 	if (this->cmdMode == CommandMode::FitPoints)
 	{
 		this->fitPointsOutputMode |= FitPointsOutputMode::WriteResultToStdout;
+	}
+
+	if (this->cmdMode == CommandMode::None)
+	{
+		fprintf(stderr, "No command was specified.\n");
+		return false;
 	}
 
 	return true;
