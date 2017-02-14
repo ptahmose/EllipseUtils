@@ -25,11 +25,11 @@ static bool TestEllipseUtils_1(const COptions& opts)
 	}
 
 	bool isCorrect =
-		fabs(e.x0 - 960.44263945130331) < 0.0001 &&
-		fabs(e.y0 - 486.67764874797450) < 0.0001 &&
-		fabs(e.a - 490.00254257630809) < 0.0001 &&
-		fabs(e.b - 440.87372019871373) < 0.0001 &&
-		fabs(e.theta - (-1.2640157348100098)) < 0.0001;
+		fabs(e.x0 - 960.44263945130331) < 2 * 0.0001 &&
+		fabs(e.y0 - 486.67764874797450) < 2 * 0.0001 &&
+		fabs(e.a - 490.00254257630809) < 2 * 0.0001 &&
+		fabs(e.b - 440.87372019871373) < 2 * 0.0001 &&
+		fabs(e.theta - (-1.2640157348100098)) < 2 * 0.0001;
 
 	if (opts.VerboseLog() == true)
 	{
@@ -56,11 +56,11 @@ static bool TestEllipseUtils_2(const COptions& opts)
 	}
 
 	bool isCorrect =
-		fabs(e.x0 - 960.444f) < 0.001f &&
-		fabs(e.y0 - 486.678f) < 0.001f &&
-		fabs(e.a - 490.003f) < 0.001f &&
-		fabs(e.b - 440.873f) < 0.001f &&
-		fabs(e.theta - 1.87758f) < 0.0001f;
+		fabs(e.x0 - 960.444f) < 2 * 0.001f &&
+		fabs(e.y0 - 486.678f) < 2 * 0.001f &&
+		fabs(e.a - 490.003f) < 2 * 0.001f &&
+		fabs(e.b - 440.873f) < 2 * 0.001f &&
+		fabs(e.theta - 1.87758f) < 2 * 0.0001f;
 
 	if (opts.VerboseLog() == true)
 	{
@@ -70,16 +70,16 @@ static bool TestEllipseUtils_2(const COptions& opts)
 	return isCorrect;
 }
 
-static void PrintResult(int testNo,bool  success)
+static void PrintResult(int testNo, bool  success)
 {
 	cout << "Test " << testNo << " : " << (success ? "PASS" : "FAIL") << endl;
 }
 
-int main(int argc,char** argv)
+int main(int argc, char** argv)
 {
 	COptions options;
 	bool b = options.ParseCommandLine(argc - 1, argv + 1);
-	if (b!=true)
+	if (b != true)
 	{
 		return 1;
 	}
