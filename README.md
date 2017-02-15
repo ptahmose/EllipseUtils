@@ -28,5 +28,5 @@ make
 
 The argument for the cmake invocation gives the path to the Eigen3-header files, and needs to be changed to the actual location on your system.
 
-In the Test-folder there is a little script `runtests.sh` which can be used to test-drive the programs (and it cretes some SVGs in the Test/Results folder).
+In the Test-folder there is a little script `runtests.sh` which can be used to test-drive the programs (and it creates some SVGs in the Test/Results folder).
 
