@@ -6,15 +6,15 @@ You will find code for a least-square-fit of an ellipse to a list of points (ada
 
 The library is header-only and should work with any decent C++-compiler. It depends on the [Eigen-library](http://eigen.tuxfamily.org/index.php?title=Main_Page).
 
-In order to use the library, simply include the file EllipseUtils/ellipseUtils.h.
+In order to use the library, simply include the file `EllipseUtils/ellipseUtils.h`.
 
 Included are two programs for testing and demonstrating the library:
-* 'Test_EllipseUtils.exe' will execute a couple of unit-tests, and print out success/failure.
-* 'EllipseFitToSvg.exe' will perfom a fit to a set of points (which are read from a text-file), and can write the fit as an SVG-graphic.
+* `Test_EllipseUtils.exe` will execute a couple of unit-tests, and print out success/failure.
+* `EllipseFitToSvg.exe` will perfom a fit to a set of points (which are read from a text-file), and can write the fit as an SVG-graphic.
 
 ## building
 
-For building with VisualStudio there is a solution-file provided (Test_EllipseUtils.sln).
+For building with VisualStudio there is a solution-file provided (`Test_EllipseUtils.sln`).
 
 For building on Linux, we support CMake. The following command should create the two executables:
 
