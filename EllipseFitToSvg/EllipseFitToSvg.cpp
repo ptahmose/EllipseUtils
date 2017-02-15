@@ -10,6 +10,7 @@
 #include "WriteSvg.h"
 #include "options.h"
 #include "../EllipseUtils/ellipseUtils.h"
+#include "Utilities.h"
 
 using namespace std;
 using namespace EllipseUtils;
@@ -44,23 +45,24 @@ int main(int argc, char** argv)
 
 /*static*/void DoFitPoints(const COptions& options)
 {
-	auto filename = options.GetFilenameForPoints();
-	std::istream* stream; bool needToDeleteStream = false;
-	if (filename.empty() || filename.compare("-") == 0)
-	{
-		stream = &std::cin;
-	}
-	else
-	{
-		stream = new std::ifstream(filename);
-		needToDeleteStream = true;
-	}
+	std::tuple<std::vector<double>, std::vector<double>> points;
 
-	CReadPoints readPoints;
-	auto points = readPoints.ReadD(*stream);
-	if (needToDeleteStream)
 	{
-		delete stream;
+		Deleter<std::istream> deleter;
+		auto filename = options.GetFilenameForPoints();
+		std::istream* stream; 
+		if (filename.empty() || filename.compare("-") == 0)
+		{
+			stream = &std::cin;
+		}
+		else
+		{
+			stream = new std::ifstream(filename);
+			deleter.SetToDelete(stream);
+		}
+
+		CReadPoints readPoints;
+		points = readPoints.ReadD(*stream);
 	}
 
 	auto ellipse_parameters = EllipseUtils::CEllipseFit<double>::LeastSquaresFitEllipse(std::get<0>(points), std::get<1>(points));
@@ -77,18 +79,17 @@ int main(int argc, char** argv)
 
 	if ((options.GetFitPointsOutputMode() & FitPointsOutputMode::WriteSvg) == FitPointsOutputMode::WriteSvg)
 	{
-		//std::unique_ptr<CWriteSvg> writeSvg;
+		Deleter<std::ostream> deleter;
 		std::ostream* ostream;
 		auto outpfilename = options.GetFilenameForSvgOutput();
 		if (outpfilename.empty())
 		{
 			ostream = &std::cout;
-			needToDeleteStream = false;
 		}
 		else
 		{
 			ostream = new std::ofstream(outpfilename);
-			needToDeleteStream = true;
+			deleter.SetToDelete(ostream);
 		}
 
 		CWriteSvg writeSvg(*ostream);
@@ -105,11 +106,6 @@ int main(int argc, char** argv)
 			return true;
 		},
 			&ellipse_parameters);
-
-		if (needToDeleteStream)
-		{
-			delete ostream;
-		}
 	}
 }
 

@@ -84,6 +84,9 @@ bool CReadPoints::String_to_double(const std::string& s, double& d)
 {
 	std::istringstream i(s);
 	if (!(i >> d))
+	{
 		return false;
+	}
+
 	return true;
 }
