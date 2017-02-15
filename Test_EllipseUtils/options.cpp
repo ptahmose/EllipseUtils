@@ -11,7 +11,8 @@ bool COptions::ParseCommandLine(int argc, char** argv)
 
 	static const option::Descriptor usage[] =
 	{
-		{ UNKNOWN, 0, ""  , "",        option::Arg::None, "USAGE: " PROGRAM_NAME " [options]\n\n"	"Options:" },
+		{ UNKNOWN, 0, ""  , "",        option::Arg::None, "USAGE: " PROGRAM_NAME " [options]\n\n"	
+			"This program will execute a couple of unit-tests and print success or failure.\n" "Options:" },
 		{ HELP,    0, "h" , "help",    option::Arg::None, "  --help  \tPrint usage and exit." },
 		{ VERBOSE, 0, "v" , "verbose", option::Arg::None, "  --verbose, -v  \tVerbose output." },
 		{ UNKNOWN, 0, ""  ,  "",       option::Arg::None, "\nExamples:\n"

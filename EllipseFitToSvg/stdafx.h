@@ -14,4 +14,9 @@
 
 
 #include <memory>
+#include <iostream>
+#include <random>
+#include <vector>
+#include <regex>
+#include <sstream>
 // TODO: reference additional headers your program requires here

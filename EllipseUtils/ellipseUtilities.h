@@ -46,7 +46,6 @@ namespace EllipseUtils
 		{
 			EllipseParameters<tFloat> p2;
 			tFloat sigma = 4 * (p1.c*p1.d*p1.d + p1.a*p1.e*p1.e - p1.b*p1.d*p1.e - p1.f*(4 * p1.a*p1.c - p1.b*p1.b)) / squared(4 * p1.a*p1.c - p1.b*p1.b);
-			//double oneoversigma = 1 / sigma;
 
 			tFloat num = (4 * p1.a*p1.c - p1.b*p1.b);
 			p2.x0 = (p1.b*p1.e - 2 * p1.c*p1.d) / num;
@@ -58,7 +57,6 @@ namespace EllipseUtils
 			p2.a = sqrt(abs((sigma*p1.a + sigma*p1.c + sqrt(squared(sigma*p1.a - sigma*p1.c) + squared(sigma*p1.b))) / 2));
 			p2.b = sqrt(abs((sigma*p1.a + sigma*p1.c - sqrt(squared(sigma*p1.a - sigma*p1.c) + squared(sigma*p1.b))) / 2));
 
-			// p2.theta = acot((p1.a - p1.c) / p1.b) / 2;  --> why not working?
 			p2.theta = atan2(p1.b, p1.a - p1.c) / 2;
 
 			// that's the angle between the x-axis and the ellipse's major axis
@@ -112,7 +110,6 @@ namespace EllipseUtils
 				*pY = ellipseParams.y0 + ellipseParams.a*cosT*sinTheta + ellipseParams.b*sinT*cosTheta;
 			}
 		}
-
 
 		template <typename tFloat>
 		static void SampleEllipse(const EllipseParameters<tFloat>& ellipseParams, int numberOfPointsToSample, std::function<bool(tFloat, tFloat)> funcPt)
