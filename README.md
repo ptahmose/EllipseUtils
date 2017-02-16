@@ -4,6 +4,10 @@ This project contains some utilities in order to work with ellipses.
 
 You will find code for a least-square-fit of an ellipse to a list of points (adapted from this paper:  http://autotrace.sourceforge.net/WSCG98.pdf)
 
+Here is an example of an ellipse fitted to some points:
+
+![fitted_ellipse](https://cloud.githubusercontent.com/assets/4881321/23005913/2d2dad12-f3ff-11e6-8a7c-d560025dbee4.PNG)
+
 The library is header-only and should work with any decent C++-compiler. It depends on the [Eigen-library](http://eigen.tuxfamily.org/index.php?title=Main_Page).
 
 In order to use the library, simply include the file `EllipseUtils/ellipseUtils.h`.
