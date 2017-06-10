@@ -30,12 +30,130 @@
 
 #include "ellipseBasicTypes.h"
 #include <functional>
+#include <Eigen/Eigenvalues>
 
 namespace EllipseUtils
 {
 	class CEllipseUtilities
 	{
+	private:
+		template<typename tFloat>
+		class RunningStat
+		{
+		public:
+			RunningStat() : m_n(0) {}
+
+			void Clear()
+			{
+				m_n = 0;
+			}
+
+			void Push(tFloat x)
+			{
+				m_n++;
+
+				// See Knuth TAOCP vol 2, 3rd edition, page 232
+				if (m_n == 1)
+				{
+					m_oldM = m_newM = x;
+					m_oldS = 0.0;
+				}
+				else
+				{
+					m_newM = m_oldM + (x - m_oldM) / m_n;
+					m_newS = m_oldS + (x - m_oldM)*(x - m_newM);
+
+					// set up for next iteration
+					m_oldM = m_newM;
+					m_oldS = m_newS;
+				}
+			}
+
+			size_t NumDataValues() const { return m_n; }
+			tFloat Mean() const { return (m_n > 0) ? m_newM : 0.0; }
+			tFloat Variance() const { return ((m_n > 1) ? m_newS / (m_n - 1) : 0.0); }
+			tFloat StandardDeviation() const { return std::sqrt(Variance()); }
+		private:
+			size_t m_n;
+			tFloat m_oldM, m_newM, m_oldS, m_newS;
+		};
 	public:
+		template<typename tFloat>
+		class CDistanceToEllipse
+		{
+		private:
+			Eigen::Matrix<tFloat, 3, 3>	m, mInv;
+		public:
+			CDistanceToEllipse() = delete;
+			CDistanceToEllipse(const EllipseParameters<tFloat>& params)
+			{
+				Eigen::Matrix<tFloat, 3, 3> s, r, t;
+
+				// the scaling matrix
+				s << params.a, 0, 0,
+					0, params.b, 0,
+					0, 0, 1;
+				auto sinTheta = std::sin(params.theta);
+				auto cosTheta = std::cos(params.theta);
+
+				// the rotation matrix
+				r << cosTheta, -sinTheta, 0,
+					sinTheta, cosTheta, 0,
+					0, 0, 1;
+
+				// the translation matrix
+				t << 1, 0, params.x0,
+					0, 1, params.y0,
+					0, 0, 1;
+
+				this->m.noalias() = t*r*s;
+				this->mInv.noalias() = this->m.inverse();
+			}
+
+			/// <summary>	Calculate the radial distance (which is a good approximation to the distance). </summary>
+			/// <param name="x">			The x coordinate of the query point. </param>
+			/// <param name="y">			The y coordinate of the query point. </param>
+			/// <param name="pRx">			[out] If non-null, the x-coordinate for the "radial point". </param>
+			/// <param name="pRy">			[out] If non-null, the y-coordinate for the "radial point". </param>
+			/// <param name="pDistance">	[out] If non-null, the distance of the point to the radial point. </param>
+			void Calc(tFloat x, tFloat y, tFloat* pRx, tFloat* pRy, tFloat* pDistance, bool* isInsideOfEllipse = nullptr)
+			{
+				Eigen::Matrix<tFloat, 3, 1> p(x, y, 1);
+
+				// transform the query-point into a coordinate-system where the ellipse is a unit-2-sphere
+				auto pT = this->mInv * p;
+
+				auto lengthOfpT = std::sqrt(pT(0)*pT(0) + pT(1)*pT(1));
+				if (isInsideOfEllipse != nullptr)
+				{
+					*isInsideOfEllipse = (lengthOfpT <= 1) ? true : false;
+				}
+
+				// then... the nearest point is just a point on this circle ("in the direction" of the query-point)
+				Eigen::Matrix<tFloat, 3, 1> qT = pT / lengthOfpT;
+				qT(2) = 1;
+
+				// then, transform this point (on the circle) back
+				auto q = this->m * qT;
+
+				if (pRx != nullptr)
+				{
+					*pRx = q(0);
+				}
+				if (pRy != nullptr)
+				{
+					*pRy = q(1);
+				}
+
+				if (pDistance != nullptr)
+				{
+					tFloat dx = x - q(0);
+					tFloat dy = y - q(1);
+					*pDistance = std::sqrt(dx*dx + dy*dy);
+				}
+			}
+		};
+
 		/*static const double PI = 3.141592653589793238463;
 		static const float  PI_F = 3.14159265358979f;
 		static const double PI_2 = 3.141592653589793238463 / 2;
@@ -126,6 +244,30 @@ namespace EllipseUtils
 					break;
 				}
 			}
+		}
+
+		template <typename tFloat>
+		static void EstimateErrorOfFit(const EllipseParameters<tFloat>& ellP, std::function<bool(size_t index, tFloat*, tFloat*)> getPntsFnc, tFloat* meanDistance, tFloat* stdDevDistance, tFloat* maxDistance)
+		{
+			CEllipseUtilities::CDistanceToEllipse<tFloat> dist(ellP);
+			CEllipseUtilities::RunningStat<tFloat> stat;
+			double _maxDistance = -1;
+			for (int i = 0; ; ++i)
+			{
+				tFloat x, y, d;
+				if (getPntsFnc(i, &x, &y) != true)
+					break;
+				dist.Calc(x, y, nullptr, nullptr, &d);
+				stat.Push(d);
+				if (_maxDistance < d)
+				{
+					_maxDistance = d;
+				}
+			}
+
+			if (meanDistance != nullptr) { *meanDistance = stat.Mean(); }
+			if (stdDevDistance != nullptr) { *stdDevDistance = stat.StandardDeviation(); }
+			if (maxDistance != nullptr) { *maxDistance = _maxDistance; }
 		}
 	private:
 		template <typename number> static number squared(number n)
