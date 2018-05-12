@@ -31,6 +31,11 @@ make
 ```
 
 The argument for the cmake invocation gives the path to the Eigen3-header files, and needs to be changed to the actual location on your system.
+If eigen is installed on your system, then cmake should pick it up. Running
+```
+sudo apt install libeigen3-dev
+```
+should set up everything ready to go.
 
 In the Test-folder there is a little script `runtests.sh` which can be used to test-drive the programs (and it creates some SVGs in the Test/Results folder).
 
